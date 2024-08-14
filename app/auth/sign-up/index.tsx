@@ -57,7 +57,6 @@ export default function Index() {
           data.message || "Failed to create account",
           ToastAndroid.LONG
         );
-        console.log("dataa", data)
       }
     } catch (error) {
       ToastAndroid.show(

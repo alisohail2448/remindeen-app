@@ -4,15 +4,56 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  ToastAndroid,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation, useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { LOGIN_USER } from "@/constants/constants";
+import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const initialLogin = {
+  phone: '',
+  password: ''
+}
 
 export default function Index() {
   const navigation = useNavigation();
   const router = useRouter();
+  const [login,setLogin] = useState(initialLogin)
+
+  const postUserLogin = async () => {
+
+    if (!login.phone || !login.password) {
+      ToastAndroid.show("Please fill in all fields", ToastAndroid.LONG);
+      return;
+    }
+  
+    try {
+      const result = await axios.post(LOGIN_USER, login);
+      const data = result.data;
+  
+      if (data) {
+        const token = data.token;
+        await AsyncStorage.setItem('jwtToken', token);
+        ToastAndroid.show("Login successfully", ToastAndroid.LONG);
+        router.push("/home");
+      } else {
+        ToastAndroid.show(
+          data.message || "Failed to login",
+          ToastAndroid.LONG
+        );
+      }
+    } catch (error) {
+      ToastAndroid.show(
+        "An error occurred. Please try again later.",
+        ToastAndroid.LONG
+      );
+      console.log("error", error);
+    }
+  };
 
   useEffect(() => {
     navigation.setOptions({
@@ -50,7 +91,12 @@ export default function Index() {
         <Text style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}>
           Phone
         </Text>
-        <TextInput style={styles.input} placeholder="+91 9083427234" />
+        <TextInput
+          style={styles.input}
+          placeholder="+91 9083427234"
+          value={login.phone}
+          onChangeText={(text) => setLogin({ ...login, phone: text })}
+        />
       </View>
 
       <View style={{ marginTop: 20 }}>
@@ -61,9 +107,11 @@ export default function Index() {
           style={styles.input}
           placeholder="Enter Password"
           secureTextEntry={true}
+          value={login.password}
+          onChangeText={(text) => setLogin({...login, password: text})}
         />
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={postUserLogin}>
         <Text
           style={{
             color: Colors.WHITE,
@@ -92,7 +140,10 @@ export default function Index() {
           }}
         >
           Don't have any account?{" "}
-          <Text onPress={() => router.push('/auth/sign-up')} style={{ fontFamily: "redhat-bold", color: Colors.primary }}>
+          <Text
+            onPress={() => router.push("/auth/sign-up")}
+            style={{ fontFamily: "redhat-bold", color: Colors.primary }}
+          >
             Register
           </Text>
         </Text>
