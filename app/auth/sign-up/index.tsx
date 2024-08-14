@@ -66,7 +66,8 @@ export default function Index() {
             fontSize: 20,
           }}
         >
-          Sign In
+          {/* Sign In */}
+          Rizwan
         </Text>
         <Ionicons
           name="chevron-forward-outline"
