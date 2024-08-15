@@ -57,7 +57,6 @@ export default function Index() {
           data.message || "Failed to create account",
           ToastAndroid.LONG
         );
-        console.log("dataa", data)
       }
     } catch (error) {
       ToastAndroid.show(
@@ -117,7 +116,7 @@ export default function Index() {
           Designation
         </Text>
         <SelectList
-          setSelected={(val) => setDesignation(val)}
+          setSelected={(val:any) => setDesignation(val)}
           data={DESIGNATION_TYPES}
           save="value"
           boxStyles={{
