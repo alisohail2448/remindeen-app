@@ -1,10 +1,34 @@
 import { Colors } from "@/constants/Colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {jwtDecode} from "jwt-decode";
+
 
 export default function Index() {
   const router = useRouter();
+
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('jwtToken');
+        if (token) {
+          const decodedToken = jwtDecode(token);
+
+          if (decodedToken.exp * 1000 > Date.now()) {
+            router.push("/home");
+          } 
+        }
+      } catch (error) {
+        console.log("Token verification failed", error);
+      }
+    };
+
+    checkToken();
+  }, []);
+
+
   return (
     <View style={{ backgroundColor: "#fff" }}>
       <Image

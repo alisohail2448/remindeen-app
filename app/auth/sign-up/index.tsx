@@ -51,12 +51,13 @@ export default function Index() {
 
       if (data.success) {
         ToastAndroid.show("Account created successfully", ToastAndroid.LONG);
-        router.push("/auth/sign-in");
+        router.push("/home");
       } else {
         ToastAndroid.show(
-          data.message || "Failed to create account",
+          data.msg || "Failed to create account",
           ToastAndroid.LONG
         );
+        console.log("dataaa", data)
       }
     } catch (error) {
       ToastAndroid.show(
