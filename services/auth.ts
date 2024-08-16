@@ -1,4 +1,4 @@
-import { POST_CREATE_ACCOUNT } from "@/constants/constants";
+import { POST_CREATE_ACCOUNT, POST_LOGIN_USER } from "@/constants/constants";
 import axios from "axios";
 
 export const createAccount = async (accountData) => {
@@ -15,8 +15,6 @@ export const createAccount = async (accountData) => {
       }
     }
   };
-
-
 
   export const loginUser = async (values) => {
     try {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -29,8 +29,10 @@ const validationSchema = Yup.object().shape({
 export default function Index() {
   const navigation = useNavigation();
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const postUserLogin = async (values, { setSubmitting }) => {
+    setLoading(true);
     try {
       const data = await loginUser(values);
 
@@ -39,7 +41,8 @@ export default function Index() {
         ToastAndroid.show("Login successfully", ToastAndroid.LONG);
         router.push("/home");
       } else {
-        ToastAndroid.show(data.message || "Failed to login", ToastAndroid.LONG);
+        ToastAndroid.show(data.msg || "Failed to login", ToastAndroid.LONG);
+        console.log("Error:", data.msg);
       }
     } catch (error) {
       ToastAndroid.show(
@@ -47,7 +50,7 @@ export default function Index() {
         ToastAndroid.LONG
       );
     } finally {
-      setSubmitting(false);
+      setLoading(false);
     }
   };
 
@@ -114,7 +117,7 @@ export default function Index() {
               onPress={handleSubmit}
               disabled={isSubmitting}
             >
-              {isSubmitting ? (
+              {loading ? (
                 <ActivityIndicator color={Colors.WHITE} />
               ) : (
                 <>
