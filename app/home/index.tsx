@@ -1,9 +1,12 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Button, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
-import { useNavigation } from "expo-router";
+import { Link, useNavigation, useRouter } from "expo-router";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Index() {
   const navigation = useNavigation();
+  const router = useRouter();
+  // const { logout } = useAuth();
 
   useEffect(() => {
     navigation.setOptions({
@@ -12,11 +15,11 @@ export default function Index() {
   }, []);
   return (
     <View style={{ marginTop: 40, padding: 20 }}>
-      <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }} >
-        <Image
-          style={{ width: 50, height: 50, borderRadius: 100 }}
-          source={require("../../assets/images/profile.png")}
-        />
+      <TouchableOpacity onPress={() => router.push('/profile')} style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+          <Image 
+            style={{ width: 50, height: 50, borderRadius: 100 }}
+            source={require("../../assets/images/profile.png")}
+          />
         <View style={{ gap: 5 }}>
           <Text style={{ fontSize: 18, fontFamily: "redhat-medium" }}>
             Assalam Alaikum!
@@ -25,7 +28,8 @@ export default function Index() {
             Welcome Back!
           </Text>
         </View>
-      </View>
+        {/* <Button onPress={logout} title="Logout" /> */}
+      </TouchableOpacity>
     </View>
   );
 }

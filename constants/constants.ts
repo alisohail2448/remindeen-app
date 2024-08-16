@@ -10,4 +10,4 @@
 
 
     export const POST_CREATE_ACCOUNT=`${SERVER_URL}/auth/signup`;
-    export const LOGIN_USER = `${SERVER_URL}/auth/login`;
+    export const POST_LOGIN_USER = `${SERVER_URL}/auth/login`;
