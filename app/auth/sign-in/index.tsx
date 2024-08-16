@@ -6,15 +6,15 @@ import {
   StyleSheet,
   TouchableOpacity,
   ToastAndroid,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { POST_LOGIN_USER } from "@/constants/constants";
+import { loginUser } from "@/services/auth";
 
 const validationSchema = Yup.object().shape({
   phone: Yup.string()
@@ -32,15 +32,10 @@ export default function Index() {
 
   const postUserLogin = async (values, { setSubmitting }) => {
     try {
-      const result = await axios.post(POST_LOGIN_USER, values);
-      const data = result.data;
+      const data = await loginUser(values);
 
-      console.log("result", result);
-
-
-      if (data) {
-        const token = data.token;
-        await AsyncStorage.setItem("jwtToken", token);
+      if (data.token) {
+        await AsyncStorage.setItem("jwtToken", data.token);
         ToastAndroid.show("Login successfully", ToastAndroid.LONG);
         router.push("/home");
       } else {
@@ -119,12 +114,18 @@ export default function Index() {
               onPress={handleSubmit}
               disabled={isSubmitting}
             >
-              <Text style={styles.buttonText}>Sign In</Text>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={20}
-                color={Colors.WHITE}
-              />
+              {isSubmitting ? (
+                <ActivityIndicator color={Colors.WHITE} />
+              ) : (
+                <>
+                  <Text style={styles.buttonText}>Sign In</Text>
+                  <Ionicons
+                    name="chevron-forward-outline"
+                    size={20}
+                    color={Colors.WHITE}
+                  />
+                </>
+              )}
             </TouchableOpacity>
           </>
         )}

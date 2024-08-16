@@ -5,19 +5,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   ToastAndroid,
+  ActivityIndicator,
+  ScrollView,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation, router } from "expo-router";
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SelectList } from "react-native-dropdown-select-list";
-import { DESIGNATION_TYPES, POST_CREATE_ACCOUNT } from "@/constants/constants";
-import axios from "axios";
+import { DESIGNATION_TYPES } from "@/constants/constants";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { createAccount } from "@/services/auth";
 
 export default function Index() {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -25,9 +28,8 @@ export default function Index() {
     });
   }, []);
 
-  // Validation schema using Yup
   const validationSchema = Yup.object().shape({
-    fullName: Yup.string().required("Full Name is required"),
+    name: Yup.string().required("Full Name is required"),
     phone: Yup.string()
       .required("Phone number is required")
       .matches(/^[0-9]{10}$/, "Phone number is not valid"),
@@ -38,34 +40,29 @@ export default function Index() {
   });
 
   const handleCreateAccount = async (values) => {
+    setLoading(true);
     try {
-      const response = await axios.post(POST_CREATE_ACCOUNT, values);
-
-      const data = response.data;
-
+      const data = await createAccount(values);
+  
       if (data.success) {
         ToastAndroid.show("Account created successfully", ToastAndroid.LONG);
         router.push("/home");
       } else {
-        ToastAndroid.show(
-          data.msg || "Failed to create account",
-          ToastAndroid.LONG
-        );
-        console.log("dataaa", data);
+        ToastAndroid.show(data.msg || "Failed to create account", ToastAndroid.LONG);
+        console.log("Error:", data.msg); // Log the error message for debugging
       }
     } catch (error) {
-      ToastAndroid.show(
-        "An error occurred. Please try again later.",
-        ToastAndroid.LONG
-      );
-      console.log("error", error);
+      ToastAndroid.show("An error occurred. Please try again later.", ToastAndroid.LONG);
+      console.log("Unexpected error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <Formik
       initialValues={{
-        fullName: "",
+        name: "",
         phone: "",
         designation: "",
         password: "",
@@ -82,7 +79,7 @@ export default function Index() {
         errors,
         touched,
       }) => (
-        <View
+        <ScrollView
           style={{
             backgroundColor: "#fff",
             height: "100%",
@@ -102,23 +99,27 @@ export default function Index() {
           </View>
 
           <View style={{ marginTop: 40 }}>
-            <Text style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}>
+            <Text
+              style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}
+            >
               Full Name
             </Text>
             <TextInput
               style={styles.input}
               placeholder="Enter Name"
               value={values.fullName}
-              onChangeText={handleChange("fullName")}
-              onBlur={handleBlur("fullName")}
+              onChangeText={handleChange("name")}
+              onBlur={handleBlur("name")}
             />
-            {touched.fullName && errors.fullName && (
-              <Text style={styles.errorText}>{errors.fullName}</Text>
+            {touched.name && errors.name && (
+              <Text style={styles.errorText}>{errors.name}</Text>
             )}
           </View>
 
           <View style={{ marginTop: 20 }}>
-            <Text style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}>
+            <Text
+              style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}
+            >
               Phone
             </Text>
             <TextInput
@@ -135,7 +136,9 @@ export default function Index() {
           </View>
 
           <View style={{ marginTop: 20 }}>
-            <Text style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}>
+            <Text
+              style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}
+            >
               Designation
             </Text>
             <SelectList
@@ -155,7 +158,9 @@ export default function Index() {
           </View>
 
           <View style={{ marginTop: 20 }}>
-            <Text style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}>
+            <Text
+              style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}
+            >
               Password
             </Text>
             <TextInput
@@ -171,22 +176,32 @@ export default function Index() {
             )}
           </View>
 
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text
-              style={{
-                color: Colors.WHITE,
-                fontFamily: "redhat-medium",
-                textAlign: "center",
-                fontSize: 20,
-              }}
-            >
-              Create Account
-            </Text>
-            <Ionicons
-              name="chevron-forward-outline"
-              size={20}
-              color={Colors.WHITE}
-            />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSubmit}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color={Colors.WHITE} />
+            ) : (
+              <>
+                <Text
+                  style={{
+                    color: Colors.WHITE,
+                    fontFamily: "redhat-medium",
+                    textAlign: "center",
+                    fontSize: 20,
+                  }}
+                >
+                  Create Account
+                </Text>
+                <Ionicons
+                  name="chevron-forward-outline"
+                  size={20}
+                  color={Colors.WHITE}
+                />
+              </>
+            )}
           </TouchableOpacity>
 
           <View>
@@ -208,7 +223,7 @@ export default function Index() {
               </Text>
             </Text>
           </View>
-        </View>
+        </ScrollView>
       )}
     </Formik>
   );

@@ -18,7 +18,7 @@ export default function Index() {
     <>
       <View style={styles.container}>
         <View style={styles.profileContainer}>
-          <View style={styles.profilePic}>
+          <TouchableOpacity onPress={() => router.push('/profile')}  style={styles.profilePic}>
             <Image
               style={{ width: 50, height: 50, borderRadius: 100 }}
               source={require("../../assets/images/profile.png")}
@@ -28,7 +28,7 @@ export default function Index() {
               <Text style={styles.welcome}>Welcome Back!</Text>
               <Text style={styles.userText}>John Doe</Text>
             </View>
-          </View>
+          </TouchableOpacity>
           <View>
             <Image
               style={{ width: 17.88, height: 19 }}
