@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Link, useNavigation, useRouter } from "expo-router";
 import { useAuth } from "@/hooks/useAuth";
 import { StyleSheet } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Index() {
   const navigation = useNavigation();
@@ -18,7 +19,10 @@ export default function Index() {
     <>
       <View style={styles.container}>
         <View style={styles.profileContainer}>
-          <TouchableOpacity onPress={() => router.push('/profile')}  style={styles.profilePic}>
+          <TouchableOpacity
+            onPress={() => router.push("/profile")}
+            style={styles.profilePic}
+          >
             <Image
               style={{ width: 50, height: 50, borderRadius: 100 }}
               source={require("../../assets/images/profile.png")}
@@ -30,10 +34,9 @@ export default function Index() {
             </View>
           </TouchableOpacity>
           <View>
-            <Image
-              style={{ width: 17.88, height: 19 }}
-              source={require("../../assets/images/Vector.png")}
-            />
+            <Link href={"/notification"}>
+              <Ionicons name="notifications" size={40} color="#EAAF67" />
+            </Link>
           </View>
         </View>
         <View>
@@ -51,16 +54,16 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     marginTop: 26,
-    padding: 30,
+    padding: 10,
     backgroundColor: "#102A2B",
     height: "50%",
-    flexDirection:'row',
-    justifyContent:'space-between',
-    paddingTop:40
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingTop: 40,
   },
   profilePic: {
     flexDirection: "row",
-    gap: 20,
+    gap: 10,
     alignItems: "center",
     width: 192,
     height: 50,
