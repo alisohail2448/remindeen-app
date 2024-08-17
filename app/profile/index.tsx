@@ -20,7 +20,7 @@ export default function Index() {
           <Feather name="arrow-left" size={24} color="#004B40" />
         </TouchableOpacity>
         <Text
-          style={{ fontSize: 20, fontFamily: "redhat-bold", color: "#004B40" }}
+          style={{ fontSize: 20, fontFamily: "inter-bold", color: "#004B40" }}
         >
           Profile
         </Text>
