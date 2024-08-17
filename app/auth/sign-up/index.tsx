@@ -43,16 +43,22 @@ export default function Index() {
     setLoading(true);
     try {
       const data = await createAccount(values);
-  
+
       if (data.success) {
         ToastAndroid.show("Account created successfully", ToastAndroid.LONG);
         router.push("/home");
       } else {
-        ToastAndroid.show(data.msg || "Failed to create account", ToastAndroid.LONG);
+        ToastAndroid.show(
+          data.msg || "Failed to create account",
+          ToastAndroid.LONG
+        );
         console.log("Error:", data.msg); // Log the error message for debugging
       }
     } catch (error) {
-      ToastAndroid.show("An error occurred. Please try again later.", ToastAndroid.LONG);
+      ToastAndroid.show(
+        "An error occurred. Please try again later.",
+        ToastAndroid.LONG
+      );
       console.log("Unexpected error:", error);
     } finally {
       setLoading(false);
@@ -90,7 +96,7 @@ export default function Index() {
             <Text
               style={{
                 fontSize: 26,
-                fontFamily: "redhat-bold",
+                fontFamily: "inter-bold",
                 color: Colors.primary,
               }}
             >
@@ -100,7 +106,7 @@ export default function Index() {
 
           <View style={{ marginTop: 40 }}>
             <Text
-              style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}
+              style={styles.label}
             >
               Full Name
             </Text>
@@ -118,7 +124,7 @@ export default function Index() {
 
           <View style={{ marginTop: 20 }}>
             <Text
-              style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}
+              style={styles.label}
             >
               Phone
             </Text>
@@ -137,7 +143,7 @@ export default function Index() {
 
           <View style={{ marginTop: 20 }}>
             <Text
-              style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}
+              style={styles.label}
             >
               Designation
             </Text>
@@ -146,10 +152,11 @@ export default function Index() {
               data={DESIGNATION_TYPES}
               save="value"
               boxStyles={{
-                borderColor: "#000",
+                borderColor: Colors.primary,
               }}
               inputStyles={{
-                paddingVertical: 6,
+                fontSize: 16,
+                // color: Colors.primary,
               }}
             />
             {touched.designation && errors.designation && (
@@ -159,7 +166,7 @@ export default function Index() {
 
           <View style={{ marginTop: 20 }}>
             <Text
-              style={{ fontSize: 16, fontFamily: "redhat", marginBottom: 10 }}
+              style={styles.label}
             >
               Password
             </Text>
@@ -188,16 +195,16 @@ export default function Index() {
                 <Text
                   style={{
                     color: Colors.WHITE,
-                    fontFamily: "redhat-medium",
+                    fontFamily: "inter-medium",
                     textAlign: "center",
-                    fontSize: 20,
+                    fontSize: 18,
                   }}
                 >
                   Create Account
                 </Text>
                 <Ionicons
                   name="chevron-forward-outline"
-                  size={20}
+                  size={18}
                   color={Colors.WHITE}
                 />
               </>
@@ -208,7 +215,7 @@ export default function Index() {
             <Text
               style={{
                 fontSize: 16,
-                fontFamily: "redhat",
+                fontFamily: "inter",
                 marginBottom: 10,
                 textAlign: "center",
                 marginTop: 40,
@@ -217,7 +224,7 @@ export default function Index() {
               Do you have account?{" "}
               <Text
                 onPress={() => router.push("/auth/sign-in")}
-                style={{ fontFamily: "redhat-bold", color: Colors.primary }}
+                style={{ fontFamily: "inter-bold", color: Colors.primary }}
               >
                 Sign In
               </Text>
@@ -230,12 +237,21 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
+  label: {
+    fontSize: 16,
+    fontFamily: "inter-medium",
+    marginBottom: 10,
+    color: Colors.primary,
+  },
   input: {
-    padding: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderWidth: 1,
-    borderRadius: 15,
-    borderColor: "#000",
-    fontFamily: "redhat",
+    borderRadius: 10,
+    borderColor: Colors.primary,
+    fontFamily: "inter-medium",
+    fontSize: 16,
+    color: Colors.primary,
   },
   button: {
     padding: 15,

@@ -3,9 +3,9 @@ import { Stack } from "expo-router";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    redhat: require("./../assets/fonts/RedHatDisplay-Regular.ttf"),
-    "redhat-medium": require("./../assets/fonts/RedHatDisplay-Medium.ttf"),
-    "redhat-bold": require("./../assets/fonts/RedHatDisplay-Bold.ttf"),
+    "inter": require("./../assets/fonts/Inter_24pt-Regular.ttf"),
+    "inter-medium": require("./../assets/fonts/Inter_18pt-Medium.ttf"),
+    "inter-bold": require("./../assets/fonts/Inter_18pt-Bold.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -15,7 +15,7 @@ export default function RootLayout() {
   return (
     <Stack>
       <Stack.Screen
-        name="(tabs)"
+        name="index"
         options={{
           headerShown: false,
         }}

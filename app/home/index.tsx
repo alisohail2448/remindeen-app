@@ -70,17 +70,17 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontSize: 18,
-    fontFamily: "redhat-medium",
+    fontFamily: "inter-medium",
     color: "#FFFFFF",
   },
   welcome: {
     fontSize: 14,
-    fontFamily: "redhat",
+    fontFamily: "inter",
     color: "#FFFFFF",
   },
   userText: {
     fontSize: 10,
-    fontFamily: "redhat",
+    fontFamily: "inter",
     color: "#FFFFFF",
   },
 });

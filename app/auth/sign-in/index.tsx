@@ -124,7 +124,7 @@ export default function Index() {
                   <Text style={styles.buttonText}>Sign In</Text>
                   <Ionicons
                     name="chevron-forward-outline"
-                    size={20}
+                    size={18}
                     color={Colors.WHITE}
                   />
                 </>
@@ -157,25 +157,29 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 26,
-    fontFamily: "redhat-bold",
+    fontFamily: "inter-bold",
     color: Colors.primary,
   },
   subtitle: {
     fontSize: 26,
-    fontFamily: "redhat",
+    fontFamily: "inter",
     marginTop: 20,
   },
   label: {
     fontSize: 16,
-    fontFamily: "redhat",
+    fontFamily: "inter-medium",
     marginBottom: 10,
+    color: Colors.primary,
   },
   input: {
-    padding: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderWidth: 1,
-    borderRadius: 15,
-    borderColor: "#000",
-    fontFamily: "redhat",
+    borderRadius: 10,
+    borderColor: Colors.primary,
+    fontFamily: "inter-medium",
+    fontSize: 16,
+    color: Colors.primary,
   },
   button: {
     padding: 15,
@@ -190,25 +194,25 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: Colors.WHITE,
-    fontFamily: "redhat-medium",
+    fontFamily: "inter-medium",
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 18,
   },
   error: {
     color: "red",
     fontSize: 12,
-    fontFamily: "redhat",
+    fontFamily: "inter",
     marginTop: 5,
   },
   registerText: {
     fontSize: 16,
-    fontFamily: "redhat",
+    fontFamily: "inter",
     marginBottom: 10,
     textAlign: "center",
     marginTop: 40,
   },
   registerLink: {
-    fontFamily: "redhat-bold",
+    fontFamily: "inter-bold",
     color: Colors.primary,
   },
 });
