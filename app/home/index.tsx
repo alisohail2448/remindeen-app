@@ -52,11 +52,11 @@ export default function Index() {
           </View>
         </View>
         <Swiper
-          loop={false}
-          autoplay={false}
-          showsPagination={true}
-          dotColor="#fff"
-          activeDotColor="#000"
+          loop={true}
+          autoplay={true}
+          showsPagination={false}
+          // dotColor="#fff"
+          // activeDotColor="#000"
         >
           {images.map((image, index) => (
             <ImageBackground
@@ -66,13 +66,13 @@ export default function Index() {
             >
               <View style={styles.tasbeehCounter}>
                 <View style={{ marginBottom: 10 }}>
-                  <Text style={{ fontSize: 14, fontFamily: "poppins" }}>
+                  <Text style={{ fontSize: 14, fontFamily: "inter" }}>
                     Remember Allah
                   </Text>
                   <Text
                     style={{
                       fontSize: 20,
-                      fontFamily: "poppins",
+                      fontFamily: "inter",
                       fontWeight: "bold",
                       width: 150,
                     }}
