@@ -26,6 +26,7 @@ export default function Index() {
       headerShown: false,
     });
   }, []);
+
   return (
     <>
       <View style={styles.container}>
@@ -52,7 +53,7 @@ export default function Index() {
         </View>
         <Swiper
           loop={false}
-          autoplay={true}
+          autoplay={false}
           showsPagination={true}
           dotColor="#fff"
           activeDotColor="#000"
@@ -82,7 +83,7 @@ export default function Index() {
                 <View>
                   <TouchableOpacity
                     style={styles.getStartedBtn}
-                    // onPress={onPressLearnMore}
+                    onPress={() => router.push("/tasbih")}
                   >
                     <Text style={styles.buttonText}>Get Start Now</Text>
                   </TouchableOpacity>
