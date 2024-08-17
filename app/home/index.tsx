@@ -1,20 +1,32 @@
-import { View, Text, Image, Button, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
 import React, { useEffect } from "react";
 import { Link, useNavigation, useRouter } from "expo-router";
-import { useAuth } from "@/hooks/useAuth";
 import { StyleSheet } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Swiper from "react-native-swiper";
+
+const images = [
+  require("../../assets/images/MaskGroup.png"),
+  require("../../assets/images/MaskGroup.png"),
+  require("../../assets/images/MaskGroup.png"),
+];
 
 export default function Index() {
   const navigation = useNavigation();
   const router = useRouter();
-  // const { logout } = useAuth();
 
   useEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, []);
+
   return (
     <>
       <View style={styles.container}>
@@ -39,6 +51,47 @@ export default function Index() {
             </Link>
           </View>
         </View>
+        <Swiper
+          loop={true}
+          autoplay={true}
+          showsPagination={false}
+          // dotColor="#fff"
+          // activeDotColor="#000"
+        >
+          {images.map((image, index) => (
+            <ImageBackground
+              key={index}
+              source={image}
+              imageStyle={styles.imageStyle}
+            >
+              <View style={styles.tasbeehCounter}>
+                <View style={{ marginBottom: 10 }}>
+                  <Text style={{ fontSize: 14, fontFamily: "inter" }}>
+                    Remember Allah
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontFamily: "inter",
+                      fontWeight: "bold",
+                      width: 150,
+                    }}
+                  >
+                    Start Tasbih Counter
+                  </Text>
+                </View>
+                <View>
+                  <TouchableOpacity
+                    style={styles.getStartedBtn}
+                    onPress={() => router.push("/tasbih")}
+                  >
+                    <Text style={styles.buttonText}>Get Start Now</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ImageBackground>
+          ))}
+        </Swiper>
         <View>
           <Text>Footer Section</Text>
         </View>
@@ -51,12 +104,15 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: "100%",
+    backgroundColor: "#102A2B",
+  },
+  scrollView: {
+    marginHorizontal: 20,
   },
   profileContainer: {
     marginTop: 26,
     padding: 10,
-    backgroundColor: "#102A2B",
-    height: "50%",
     flexDirection: "row",
     justifyContent: "space-between",
     paddingTop: 40,
@@ -81,6 +137,42 @@ const styles = StyleSheet.create({
   userText: {
     fontSize: 10,
     fontFamily: "inter",
+    color: "#FFFFFF",
+  },
+  tasbeehCounter: {
+    width: "auto",
+    height: 150,
+    margin: 10,
+    backgroundColor: "#F6AF58",
+    borderRadius: 13,
+    marginTop: 50,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    padding: 20,
+  },
+  imageStyle: {
+    width: 150,
+    height: 150,
+    resizeMode: "cover",
+    position: "absolute",
+    left: 290,
+    top: 50,
+    zIndex: 10,
+  },
+  getStartedBtn: {
+    width: 150,
+    height: 60,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#1C5153",
+    borderRadius: 10,
+  },
+  buttonText: {
+    fontSize: 20,
+    fontFamily: "poppins",
     color: "#FFFFFF",
   },
 });
