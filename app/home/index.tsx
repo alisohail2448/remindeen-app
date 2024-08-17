@@ -58,39 +58,83 @@ export default function Index() {
           // dotColor="#fff"
           // activeDotColor="#000"
         >
-          {images.map((image, index) => (
-            <ImageBackground
-              key={index}
-              source={image}
-              imageStyle={styles.imageStyle}
-            >
-              <View style={styles.tasbeehCounter}>
-                <View style={{ marginBottom: 10 }}>
-                  <Text style={{ fontSize: 14, fontFamily: "inter" }}>
-                    Remember Allah
-                  </Text>
-                  <Text
+          {images.map((image, index) =>
+            index === 0 ? (
+              <View style={styles.imageStyle}>
+                <View style={styles.tasbeehCounter}>
+                  <View style={{ marginBottom: 10 }}>
+                    <Text style={{ fontSize: 14, fontFamily: "inter" }}>
+                      Remember Allah
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontFamily: "inter",
+                        fontWeight: "bold",
+                        width: 150,
+                      }}
+                    >
+                      Start Tasbih Counter
+                    </Text>
+                  </View>
+                  <View style={{ marginTop: 30 }}>
+                    <TouchableOpacity
+                      style={styles.getStartedBtn}
+                      onPress={() => router.push("/tasbih")}
+                    >
+                      <Text style={styles.buttonText}>Get Start Now</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Image
+                    source={require("../../assets/images/MaskGroup.png")}
                     style={{
-                      fontSize: 20,
-                      fontFamily: "inter",
-                      fontWeight: "bold",
                       width: 150,
+                      height: 150,
+                      position: "absolute",
+                      right: 0,
                     }}
-                  >
-                    Start Tasbih Counter
-                  </Text>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    style={styles.getStartedBtn}
-                    onPress={() => router.push("/tasbih")}
-                  >
-                    <Text style={styles.buttonText}>Get Start Now</Text>
-                  </TouchableOpacity>
+                  />
                 </View>
               </View>
-            </ImageBackground>
-          ))}
+            ) : (
+              <View style={styles.imageStyle}>
+                <View style={styles.tasbeehCounter}>
+                  <View style={{ marginBottom: 10 }}>
+                    <Text style={{ fontSize: 14, fontFamily: "inter" }}>
+                      Remember Allah
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontFamily: "inter",
+                        fontWeight: "bold",
+                        width: 150,
+                      }}
+                    >
+                      Start This
+                    </Text>
+                  </View>
+                  <View style={{ marginTop: 30 }}>
+                    <TouchableOpacity
+                      style={styles.getStartedBtn}
+                      onPress={() => router.push("/tasbih")}
+                    >
+                      <Text style={styles.buttonText}>Get Start Now</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Image
+                    source={require("../../assets/images/MaskGroup.png")}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      position: "absolute",
+                      right: 0,
+                    }}
+                  />
+                </View>
+              </View>
+            )
+          )}
         </Swiper>
         <View>
           <Text>Footer Section</Text>
@@ -151,27 +195,28 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     padding: 20,
+    position: "relative",
   },
   imageStyle: {
-    width: 150,
-    height: 150,
+    // width: 150,
+    // height: 150,
     resizeMode: "cover",
-    position: "absolute",
-    left: 290,
-    top: 50,
-    zIndex: 10,
+    // position: "absolute",
+    // left: 290,
+    // top: 50,
   },
   getStartedBtn: {
-    width: 150,
-    height: 60,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#1C5153",
-    borderRadius: 10,
+    borderRadius: 8,
+    zIndex: 10,
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 17,
     fontFamily: "poppins",
     color: "#FFFFFF",
   },
