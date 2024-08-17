@@ -1,14 +1,12 @@
-import { View, Text, Image, Button, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Button, ImageBackground } from "react-native";
 import React, { useEffect } from "react";
 import { Link, useNavigation, useRouter } from "expo-router";
-import { useAuth } from "@/hooks/useAuth";
 import { StyleSheet } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Index() {
   const navigation = useNavigation();
   const router = useRouter();
-  // const { logout } = useAuth();
 
   useEffect(() => {
     navigation.setOptions({
@@ -39,6 +37,36 @@ export default function Index() {
             </Link>
           </View>
         </View>
+        <ImageBackground
+          source={require("../../assets/images/MaskGroup.png")}
+          style={styles.tasbeehCounter}
+          imageStyle={styles.imageStyle}
+        >
+          <View>
+            <Text style={{ fontSize: 14, fontFamily: "poppins" }}>
+              Remember Allah
+            </Text>
+            <Text
+              style={{
+                fontSize: 20,
+                fontFamily: "poppins",
+                fontWeight: "bold",
+                width: 150,
+              }}
+            >
+              Start Tasbih Counter
+            </Text>
+          </View>
+          <View>
+            <TouchableOpacity
+              style={styles.getStartedBtn}
+              // onPress={onPressLearnMore}
+            >
+              <Text style={styles.buttonText}>Get Start Now</Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+
         <View>
           <Text>Footer Section</Text>
         </View>
@@ -51,12 +79,12 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    height: "100%",
+    backgroundColor: "#102A2B",
   },
   profileContainer: {
     marginTop: 26,
     padding: 10,
-    backgroundColor: "#102A2B",
-    height: "50%",
     flexDirection: "row",
     justifyContent: "space-between",
     paddingTop: 40,
@@ -83,4 +111,38 @@ const styles = StyleSheet.create({
     fontFamily: "inter",
     color: "#FFFFFF",
   },
+  tasbeehCounter:{
+    width: 'auto',
+    height: 150,
+    borderColor: 'black',
+    margin: 10,
+    backgroundColor: '#F6AF58',
+    borderRadius: 13,
+    marginTop: 50,
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'space-evenly',
+    alignItems:'center'
+  },
+  imageStyle:{
+    width: 150, 
+    height: 150,
+    resizeMode: 'cover',
+    position:'absolute',
+    left:278
+  },
+  getStartedBtn:{
+    width:150,
+    height:60,
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor:'#1C5153',
+    borderRadius:10
+  },
+  buttonText:{
+    fontSize:20,
+    fontFamily:'poppins',
+    color:'#FFFFFF'
+  }
 });
