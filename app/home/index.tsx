@@ -41,13 +41,12 @@ export default function Index() {
             />
             <View style={{ gap: 5 }}>
               <Text style={styles.textTitle}>Assalam Alaikum!</Text>
-              <Text style={styles.welcome}>Welcome Back!</Text>
-              <Text style={styles.userText}>John Doe</Text>
+              <Text style={styles.welcome}>Welcome Back! John </Text>
             </View>
           </TouchableOpacity>
           <View>
             <Link href={"/notification"}>
-              <Ionicons name="notifications" size={40} color="#EAAF67" />
+              <Ionicons name="notifications" size={30} color="#EAAF67" />
             </Link>
           </View>
         </View>
@@ -160,6 +159,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingTop: 40,
+    alignItems: 'center'
   },
   profilePic: {
     flexDirection: "row",
