@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, Button, ImageBackground } from "react-native";
+import { View, Text, Image, TouchableOpacity, Button, ImageBackground, ScrollView } from "react-native";
 import React, { useEffect } from "react";
 import { Link, useNavigation, useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
@@ -81,6 +81,9 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     backgroundColor: "#102A2B",
+  },
+  scrollView:{
+    marginHorizontal: 20,
   },
   profileContainer: {
     marginTop: 26,
