@@ -1,8 +1,21 @@
-import { View, Text, Image, TouchableOpacity, Button, ImageBackground, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
 import React, { useEffect } from "react";
 import { Link, useNavigation, useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import Swiper from "react-native-swiper";
+
+const images = [
+  require("../../assets/images/MaskGroup.png"),
+  require("../../assets/images/MaskGroup.png"),
+  require("../../assets/images/MaskGroup.png"),
+];
 
 export default function Index() {
   const navigation = useNavigation();
@@ -37,36 +50,47 @@ export default function Index() {
             </Link>
           </View>
         </View>
-        <ImageBackground
-          source={require("../../assets/images/MaskGroup.png")}
-          style={styles.tasbeehCounter}
-          imageStyle={styles.imageStyle}
+        <Swiper
+          loop={false}
+          autoplay={true}
+          showsPagination={true}
+          dotColor="#fff"
+          activeDotColor="#000"
         >
-          <View>
-            <Text style={{ fontSize: 14, fontFamily: "poppins" }}>
-              Remember Allah
-            </Text>
-            <Text
-              style={{
-                fontSize: 20,
-                fontFamily: "poppins",
-                fontWeight: "bold",
-                width: 150,
-              }}
+          {images.map((image, index) => (
+            <ImageBackground
+              key={index}
+              source={image}
+              imageStyle={styles.imageStyle}
             >
-              Start Tasbih Counter
-            </Text>
-          </View>
-          <View>
-            <TouchableOpacity
-              style={styles.getStartedBtn}
-              // onPress={onPressLearnMore}
-            >
-              <Text style={styles.buttonText}>Get Start Now</Text>
-            </TouchableOpacity>
-          </View>
-        </ImageBackground>
-
+              <View style={styles.tasbeehCounter}>
+                <View style={{ marginBottom: 10 }}>
+                  <Text style={{ fontSize: 14, fontFamily: "poppins" }}>
+                    Remember Allah
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontFamily: "poppins",
+                      fontWeight: "bold",
+                      width: 150,
+                    }}
+                  >
+                    Start Tasbih Counter
+                  </Text>
+                </View>
+                <View>
+                  <TouchableOpacity
+                    style={styles.getStartedBtn}
+                    // onPress={onPressLearnMore}
+                  >
+                    <Text style={styles.buttonText}>Get Start Now</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ImageBackground>
+          ))}
+        </Swiper>
         <View>
           <Text>Footer Section</Text>
         </View>
@@ -82,7 +106,7 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "#102A2B",
   },
-  scrollView:{
+  scrollView: {
     marginHorizontal: 20,
   },
   profileContainer: {
@@ -114,38 +138,40 @@ const styles = StyleSheet.create({
     fontFamily: "inter",
     color: "#FFFFFF",
   },
-  tasbeehCounter:{
-    width: 'auto',
+  tasbeehCounter: {
+    width: "auto",
     height: 150,
-    borderColor: 'black',
     margin: 10,
-    backgroundColor: '#F6AF58',
+    backgroundColor: "#F6AF58",
     borderRadius: 13,
     marginTop: 50,
-    display:'flex',
-    flexDirection:'row',
-    justifyContent:'space-evenly',
-    alignItems:'center'
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    padding: 20,
   },
-  imageStyle:{
-    width: 150, 
+  imageStyle: {
+    width: 150,
     height: 150,
-    resizeMode: 'cover',
-    position:'absolute',
-    left:278
+    resizeMode: "cover",
+    position: "absolute",
+    left: 290,
+    top: 50,
+    zIndex: 10,
   },
-  getStartedBtn:{
-    width:150,
-    height:60,
-    display:'flex',
-    justifyContent:'center',
-    alignItems:'center',
-    backgroundColor:'#1C5153',
-    borderRadius:10
+  getStartedBtn: {
+    width: 150,
+    height: 60,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#1C5153",
+    borderRadius: 10,
   },
-  buttonText:{
-    fontSize:20,
-    fontFamily:'poppins',
-    color:'#FFFFFF'
-  }
+  buttonText: {
+    fontSize: 20,
+    fontFamily: "poppins",
+    color: "#FFFFFF",
+  },
 });
