@@ -1,4 +1,4 @@
-import { View, Text, Pre, Pressablessable, Pressable } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useNavigation } from "expo-router";
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
@@ -8,6 +8,7 @@ import ProfileDetails from "@/components/ProfileDetails";
 
 export default function Index() {
   const navigation = useNavigation();
+
 
   useEffect(() => {
     navigation.setOptions({

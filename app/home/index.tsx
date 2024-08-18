@@ -4,13 +4,15 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  Button,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigation, useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Swiper from "react-native-swiper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useAuthHook } from "../context/auth";
 
 const images = [
   require("../../assets/images/MaskGroup.png"),
@@ -20,9 +22,15 @@ const images = [
 
 export default function Index() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const { getUserProfile } = useAuthHook();
   const router = useRouter();
   const user = useSelector((state) => state?.user);
-  console.log("data", user)
+
+  useEffect(() => {
+    getUserProfile();
+  }, [])
+  
 
   useEffect(() => {
     navigation.setOptions({
@@ -44,7 +52,12 @@ export default function Index() {
             />
             <View style={{ gap: 5 }}>
               <Text style={styles.textTitle}>Assalam Alaikum!</Text>
-              <Text style={styles.welcome}>Welcome Back! John </Text>
+              <Text style={styles.welcome}>
+                Welcome Back{" "}
+                <Text style={{ color: "#EAAF67", fontWeight: "bold" }}>
+                  {user?.name?.split(" ")[0]?.trim()}
+                </Text>
+              </Text>
             </View>
           </TouchableOpacity>
           <View>

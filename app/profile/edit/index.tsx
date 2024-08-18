@@ -24,9 +24,13 @@ import * as Yup from "yup";
 import ImageView from "react-native-image-viewing";
 import * as ImagePicker from "expo-image-picker";
 import ProfilePicUpload from "@/components/ProfilePicUpload";
+import { useSelector } from "react-redux";
+import { uploadImage } from "@/services/upload";
+import { useAuthHook } from "@/app/context/auth";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string(),
+  designation: Yup.string(),
   phone: Yup.string()
     .matches(/^[0-9]+$/, "Phone number is not valid")
     .min(10, "Phone number must be at least 10 digits"),
@@ -38,13 +42,14 @@ const validationSchema = Yup.object().shape({
 
 export default function EditProfile() {
   const navigation = useNavigation();
+  const user = useSelector((state) => state?.user);
+  const { token } = useAuthHook();
   const [upiCollapse, setUpiCollapse] = useState(false);
   const [visible, setIsVisible] = useState(false);
   const [openImageUploadDialog, setOpenImageUploadDialog] = useState(false);
-  const [QRImage, setQRImage] = useState(
-    "https://qph.cf2.quoracdn.net/main-qimg-6f10dcab91fe9a768c8757381a98e9ae-pjlq"
-  );
-  const [profileImage, setProfileImage] = useState(null);
+  const [QRImage, setQRImage] = useState(user?.upi?.qr);
+  const [profileImage, setProfileImage] = useState(user?.profilePic);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -54,12 +59,24 @@ export default function EditProfile() {
 
   const handleProfileUpdate = async (values, { setSubmitting }) => {
     console.log("valuees", values);
+    const data = {
+      name: values?.name,
+      designation: values?.designation,
+      phone: values?.phone,
+      email: values?.email,
+      mosqueName: values?.mosqueName,
+      mosqueArea: values?.mosqueArea,
+      upi: {
+        id: values?.upiId,
+        qr: QRImage,
+      },
+      profilePic: profileImage,
+    };
     try {
       // Perform the update operation here, e.g., an API call
       // await updateProfile(values);
-
-      ToastAndroid.show("Profile updated successfully", ToastAndroid.LONG);
-      navigation.goBack(); // Go back to the profile screen after update
+      // ToastAndroid.show("Profile updated successfully", ToastAndroid.LONG);
+      // navigation.goBack(); // Go back to the profile screen after update
     } catch (error) {
       ToastAndroid.show(
         "An error occurred. Please try again later.",
@@ -101,6 +118,25 @@ export default function EditProfile() {
     }
     if (!result.canceled) {
       setProfileImage(result.assets[0].uri);
+      const formData = new FormData();
+      formData.append("image", {
+        uri: result.assets[0].uri,
+        type: result.assets[0].type,
+        name: result.assets[0].fileName,
+      })
+      uploadProfilePic(formData);
+    }
+  };
+
+  const uploadProfilePic = async (formData) => {
+    setIsUploading(true);
+    try {
+      const data = await uploadImage(token, formData);
+      if(data.data){
+        setProfileImage(data.data);
+      }
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -121,12 +157,13 @@ export default function EditProfile() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <Formik
           initialValues={{
-            name: "Sohail Akhtar Ali",
-            phone: "+91 7249047105",
-            email: "maulana@gmail.com",
-            mosqueName: "Minara Masjid",
-            mosqueArea: "Gazi Plot Hiwarkhed Road Akot",
-            upiId: "7249047105@ybl",
+            name: user?.name,
+            designation: user?.designation,
+            phone: user?.phone,
+            email: user?.email,
+            mosqueName: user?.mosqueName,
+            mosqueArea: user?.mosqueArea,
+            upiId: user?.upi?.id,
           }}
           validationSchema={validationSchema}
           onSubmit={handleProfileUpdate}
@@ -193,6 +230,19 @@ export default function EditProfile() {
                     <Text style={styles.error}>{errors.name}</Text>
                   )}
                 </View>
+                <View style={[styles.inputGroup]}>
+                  <Text style={styles.label}>Designation</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Designation"
+                    value={values.designation}
+                    onChangeText={handleChange("designation")}
+                    onBlur={handleBlur("designation")}
+                  />
+                  {touched.designation && errors.designation && (
+                    <Text style={styles.error}>{errors.designation}</Text>
+                  )}
+                </View>
                 <View style={styles.inputGroup}>
                   <Text style={styles.label}>Phone</Text>
                   <TextInput
@@ -236,9 +286,11 @@ export default function EditProfile() {
                 <View style={styles.inputGroup}>
                   <Text style={styles.label}>Mosque Area</Text>
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { textAlignVertical: "top" }]}
                     placeholder="Mosque Area"
                     value={values.mosqueArea}
+                    multiline
+                    numberOfLines={4}
                     onChangeText={handleChange("mosqueArea")}
                     onBlur={handleBlur("mosqueArea")}
                   />

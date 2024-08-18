@@ -2,9 +2,9 @@ import store from "@/redux/store";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { Provider } from "react-redux";
+import { AuthProvider } from "./context/auth";
 
 export default function RootLayout() {
-
   const [fontsLoaded] = useFonts({
     inter: require("./../assets/fonts/Inter_24pt-Regular.ttf"),
     "inter-medium": require("./../assets/fonts/Inter_18pt-Medium.ttf"),
@@ -17,14 +17,16 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
+      <AuthProvider>
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack>
+      </AuthProvider>
     </Provider>
   );
 }

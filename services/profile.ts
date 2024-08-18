@@ -1,5 +1,6 @@
 import { GET_USER_PROFILE, POST_CREATE_ACCOUNT, POST_LOGIN_USER } from "@/constants/constants";
 import axios from "axios";
+
 export const getUser = async (token, userId) => {
   try {
     const URL = `${GET_USER_PROFILE}${userId}`;

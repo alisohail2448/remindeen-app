@@ -1,14 +1,24 @@
-import { View, Text, ScrollView, Image, TouchableOpacity, Button } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Button,
+} from "react-native";
 import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
 import ImageView from "react-native-image-viewing";
+import { useSelector } from "react-redux";
 
 export default function ProfileDetails() {
+  const user = useSelector((state) => state?.user);
   const [upiCollapse, setUpiCollapse] = useState(false);
   const [visible, setIsVisible] = useState(false);
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false} >
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View
         style={{
           flexDirection: "row",
@@ -32,7 +42,11 @@ export default function ProfileDetails() {
         >
           <Image
             style={{ width: 70, height: 70, borderRadius: 100 }}
-            source={require("../assets/images/profile.png")}
+            source={
+              user?.profilePic
+                ? user?.profilePic
+                : require("../assets/images/profile.png")
+            }
           />
         </View>
         <View style={{ gap: 4 }}>
@@ -50,7 +64,7 @@ export default function ProfileDetails() {
                 color: Colors.primary,
               }}
             >
-              Sohail Akhtar Ali
+              {user?.name}
             </Text>
             <Text
               style={{
@@ -64,7 +78,7 @@ export default function ProfileDetails() {
                 paddingHorizontal: 14,
               }}
             >
-              admin
+              {user?.role}
             </Text>
           </View>
           <Text
@@ -74,7 +88,7 @@ export default function ProfileDetails() {
               color: Colors.primary,
             }}
           >
-            Developer
+            {user?.designation}
           </Text>
         </View>
       </View>
@@ -118,7 +132,7 @@ export default function ProfileDetails() {
               color: Colors.BLACK,
             }}
           >
-            +91 7249047105
+            {user?.phone}
           </Text>
         </View>
         <View style={{ gap: 1 }}>
@@ -138,7 +152,7 @@ export default function ProfileDetails() {
               color: Colors.BLACK,
             }}
           >
-            maulana@gmail.com
+            {user?.email}
           </Text>
         </View>
         <View style={{ gap: 1 }}>
@@ -158,7 +172,7 @@ export default function ProfileDetails() {
               color: Colors.BLACK,
             }}
           >
-            Minara Masjid
+            {user?.mosqueName}
           </Text>
         </View>
         <View style={{ gap: 1 }}>
@@ -178,7 +192,7 @@ export default function ProfileDetails() {
               color: Colors.BLACK,
             }}
           >
-            Gazi Plot Hiwarkhed Road Akot
+            {user?.mosqueArea}
           </Text>
         </View>
       </View>
@@ -226,63 +240,82 @@ export default function ProfileDetails() {
                 gap: 4,
               }}
             >
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontFamily: "inter",
-                  color: "#5D8082",
-                }}
-              >
-                UPI Id
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  gap: 10,
-                  alignItems: "center",
-                }}
-              >
+              {!user?.upi?.id && !user?.upi?.qr && (
                 <Text
                   style={{
-                    fontSize: 16,
-                    fontFamily: "inter-medium",
-                    color: Colors.primary,
-                    backgroundColor: "#e3eeec",
-                    borderRadius: 12,
-                    paddingVertical: 8,
-                    paddingHorizontal: 14,
+                    fontSize: 14,
+                    fontFamily: "inter",
+                    color: Colors.BLACK,
                   }}
                 >
-                  7249048715@ybl
+                  There is no upi details! Add the details.
                 </Text>
-                <FontAwesome6 name="copy" size={20} color="black" />
-              </View>
+              )}
+              {user?.upi?.id && (
+                <>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontFamily: "inter",
+                      color: "#5D8082",
+                    }}
+                  >
+                    UPI Id
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      gap: 10,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontFamily: "inter-medium",
+                        color: Colors.primary,
+                        backgroundColor: "#e3eeec",
+                        borderRadius: 12,
+                        paddingVertical: 8,
+                        paddingHorizontal: 14,
+                      }}
+                    >
+                      {user?.upi?.id}
+                    </Text>
+                    <FontAwesome6 name="copy" size={20} color="black" />
+                  </View>
+                </>
+              )}
             </View>
             <View style={{ gap: 4, marginTop: 10 }}>
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontFamily: "inter",
-                  color: "#5D8082",
-                }}
-              >
-                UPI QR
-              </Text>
-              <TouchableOpacity
-                style={{ justifyContent: "center", alignItems: "center" }}
-                onPress={() => setIsVisible(true)}
-              >
-                <Image
-                  source={{
-                    uri: "https://qph.cf2.quoracdn.net/main-qimg-6f10dcab91fe9a768c8757381a98e9ae-pjlq",
-                  }}
-                  style={{
-                    width: 200,
-                    height: 200,
-                    objectFit: "contain",
-                  }}
-                />
-              </TouchableOpacity>
+              {user?.upi?.qr && (
+                <>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontFamily: "inter",
+                      color: "#5D8082",
+                    }}
+                  >
+                    UPI QR
+                  </Text>
+                  <TouchableOpacity
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                    onPress={() => setIsVisible(true)}
+                  >
+                    <Image
+                      source={{
+                        uri: user?.upi?.qr,
+                      }}
+                      style={{
+                        width: 200,
+                        height: 200,
+                        objectFit: "contain",
+                      }}
+                    />
+                  </TouchableOpacity>
+                </>
+              )}
             </View>
           </>
         )}
