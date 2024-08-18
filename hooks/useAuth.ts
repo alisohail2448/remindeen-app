@@ -6,12 +6,16 @@ import {jwtDecode} from "jwt-decode";
 export const useAuth = () => {
   const router = useRouter();
   const [isCheckingToken, setIsCheckingToken] = useState(true);
+  const [userId, setUserId] = useState('');
+  const [token, setToken] = useState('');
 
   const checkToken = async () => {
     try {
       const token = await AsyncStorage.getItem("jwtToken");
       if (token) {
+        setToken(token);
         const decodedToken = jwtDecode(token);
+        setUserId(decodedToken?.id);
 
         if (decodedToken.exp * 1000 > Date.now()) {
           router.push("/home");
@@ -41,5 +45,5 @@ export const useAuth = () => {
     checkToken();
   }, []);
 
-  return { isCheckingToken, logout };
+  return { isCheckingToken, logout, userId, token };
 };

@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { loginUser } from "@/services/auth";
+import { useDispatch } from "react-redux";
 
 const validationSchema = Yup.object().shape({
   phone: Yup.string()
@@ -29,6 +30,7 @@ const validationSchema = Yup.object().shape({
 export default function Index() {
   const navigation = useNavigation();
   const router = useRouter();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,6 +38,13 @@ export default function Index() {
     setLoading(true);
     try {
       const data = await loginUser(values);
+      
+      if(data.user){
+        dispatch({
+          type: 'SET_SPATIAL_USER',
+          payload: data.user,
+        })
+      }
 
       if (data.token) {
         await AsyncStorage.setItem("jwtToken", data.token);

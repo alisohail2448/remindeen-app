@@ -11,3 +11,4 @@
 
     export const POST_CREATE_ACCOUNT=`${SERVER_URL}/auth/signup`;
     export const POST_LOGIN_USER = `${SERVER_URL}/auth/login`;
+    export const GET_USER_PROFILE=`${SERVER_URL}/auth/spatial/`;

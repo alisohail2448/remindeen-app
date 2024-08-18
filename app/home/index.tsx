@@ -10,6 +10,7 @@ import { Link, useNavigation, useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Swiper from "react-native-swiper";
+import { useSelector } from "react-redux";
 
 const images = [
   require("../../assets/images/MaskGroup.png"),
@@ -20,6 +21,8 @@ const images = [
 export default function Index() {
   const navigation = useNavigation();
   const router = useRouter();
+  const user = useSelector((state) => state?.user);
+  console.log("data", user)
 
   useEffect(() => {
     navigation.setOptions({
@@ -59,7 +62,7 @@ export default function Index() {
         >
           {images.map((image, index) =>
             index === 0 ? (
-              <View style={styles.imageStyle}>
+              <View key={index} style={styles.imageStyle}>
                 <View style={styles.tasbeehCounter}>
                   <View style={{ marginBottom: 10 }}>
                     <Text style={{ fontSize: 14, fontFamily: "inter" }}>
@@ -96,7 +99,7 @@ export default function Index() {
                 </View>
               </View>
             ) : (
-              <View style={styles.imageStyle}>
+              <View key={index} style={styles.imageStyle}>
                 <View style={styles.tasbeehCounter}>
                   <View style={{ marginBottom: 10 }}>
                     <Text style={{ fontSize: 14, fontFamily: "inter" }}>

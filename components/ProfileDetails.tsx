@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, Image, TouchableOpacity, Button } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
