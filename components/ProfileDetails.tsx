@@ -8,7 +8,7 @@ export default function ProfileDetails() {
   const [upiCollapse, setUpiCollapse] = useState(false);
   const [visible, setIsVisible] = useState(false);
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false} >
       <View
         style={{
           flexDirection: "row",

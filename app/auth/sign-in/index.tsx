@@ -30,6 +30,7 @@ export default function Index() {
   const navigation = useNavigation();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const postUserLogin = async (values, { setSubmitting }) => {
     setLoading(true);
@@ -99,14 +100,34 @@ export default function Index() {
 
             <View style={{ marginTop: 20 }}>
               <Text style={styles.label}>Password</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter Password"
-                secureTextEntry={true}
-                value={values.password}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-              />
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  borderColor: Colors.primary,
+                }}
+              >
+                <TextInput
+                  style={[styles.password, { flex: 1 }]}
+                  placeholder="Enter Password"
+                  secureTextEntry={!showPassword}
+                  value={values.password}
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                  style={{ padding: 10 }}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye-off" : "eye"}
+                    size={24}
+                    color={Colors.primary}
+                  />
+                </TouchableOpacity>
+              </View>
               {touched.password && errors.password && (
                 <Text style={styles.error}>{errors.password}</Text>
               )}
@@ -177,6 +198,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     borderColor: Colors.primary,
+    fontFamily: "inter-medium",
+    fontSize: 16,
+    color: Colors.primary,
+  },
+  password: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     fontFamily: "inter-medium",
     fontSize: 16,
     color: Colors.primary,

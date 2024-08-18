@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, Pre, Pressablessable, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useNavigation } from "expo-router";
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
@@ -40,7 +40,7 @@ export default function Index() {
             gap: 10,
           }}
         >
-          <TouchableOpacity
+          <Pressable
             onPress={() => navigation.goBack()}
             style={{
               backgroundColor: "#e3eeec",
@@ -49,7 +49,7 @@ export default function Index() {
             }}
           >
             <Feather name="arrow-left" size={24} color="#004B40" />
-          </TouchableOpacity>
+          </Pressable>
           <Text
             style={{
               fontSize: 20,
@@ -60,7 +60,7 @@ export default function Index() {
             Profile
           </Text>
         </View>
-        <TouchableOpacity onPress={() => router.push('/profile/edit')}
+        <Pressable onPress={() => router.push('/profile/edit')}
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -81,7 +81,7 @@ export default function Index() {
           >
             Edit
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
       <ProfileDetails />
     </View>

@@ -8,29 +8,43 @@ import {
   ScrollView,
   StyleSheet,
   ToastAndroid,
+  Pressable,
+  Button,
 } from "react-native";
 import { useNavigation } from "expo-router";
-import { Entypo, Feather, FontAwesome6 } from "@expo/vector-icons";
+import {
+  Entypo,
+  Feather,
+  FontAwesome6,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import ImageView from "react-native-image-viewing";
+import * as ImagePicker from "expo-image-picker";
+import ProfilePicUpload from "@/components/ProfilePicUpload";
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
+  name: Yup.string(),
   phone: Yup.string()
     .matches(/^[0-9]+$/, "Phone number is not valid")
-    .min(10, "Phone number must be at least 10 digits")
-    .required("Phone number is required"),
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  mosqueName: Yup.string().required("Mosque name is required"),
-  mosqueArea: Yup.string().required("Mosque area is required"),
+    .min(10, "Phone number must be at least 10 digits"),
+  email: Yup.string().email("Invalid email"),
+  mosqueName: Yup.string(),
+  mosqueArea: Yup.string(),
+  upiId: Yup.string(),
 });
 
 export default function EditProfile() {
   const navigation = useNavigation();
   const [upiCollapse, setUpiCollapse] = useState(false);
   const [visible, setIsVisible] = useState(false);
+  const [openImageUploadDialog, setOpenImageUploadDialog] = useState(false);
+  const [QRImage, setQRImage] = useState(
+    "https://qph.cf2.quoracdn.net/main-qimg-6f10dcab91fe9a768c8757381a98e9ae-pjlq"
+  );
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -39,6 +53,7 @@ export default function EditProfile() {
   }, []);
 
   const handleProfileUpdate = async (values, { setSubmitting }) => {
+    console.log("valuees", values);
     try {
       // Perform the update operation here, e.g., an API call
       // await updateProfile(values);
@@ -52,6 +67,40 @@ export default function EditProfile() {
       );
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setQRImage(result.assets[0].uri);
+    }
+  };
+
+  const handlePickImage = async (pickerType) => {
+    setOpenImageUploadDialog(false);
+    let result;
+    if (pickerType === "library") {
+      result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        quality: 1,
+      });
+    } else {
+      result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        quality: 1,
+      });
+    }
+    if (!result.canceled) {
+      setProfileImage(result.assets[0].uri);
     }
   };
 
@@ -69,7 +118,7 @@ export default function EditProfile() {
         </View>
       </View>
 
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Formik
           initialValues={{
             name: "Sohail Akhtar Ali",
@@ -77,6 +126,7 @@ export default function EditProfile() {
             email: "maulana@gmail.com",
             mosqueName: "Minara Masjid",
             mosqueArea: "Gazi Plot Hiwarkhed Road Akot",
+            upiId: "7249047105@ybl",
           }}
           validationSchema={validationSchema}
           onSubmit={handleProfileUpdate}
@@ -92,11 +142,45 @@ export default function EditProfile() {
           }) => (
             <>
               <View style={styles.profileContainer}>
-                <Image
-                  style={styles.profileImage}
-                  source={require("../../../assets/images/profile.png")}
-                />
-                <View style={styles.inputGroup}>
+                <View
+                  style={{
+                    borderWidth: 2,
+                    borderColor: Colors.primary,
+                    borderStyle: "dashed",
+                    alignSelf: "center",
+                    borderRadius: 100,
+                    padding: 5,
+                  }}
+                >
+                  <Image
+                    style={styles.profileImage}
+                    source={
+                      profileImage
+                        ? {
+                            uri: profileImage,
+                          }
+                        : require("../../../assets/images/profile.png")
+                    }
+                  />
+                  <Pressable
+                    onPress={() => setOpenImageUploadDialog(true)}
+                    style={{
+                      backgroundColor: "#e3eeec",
+                      borderRadius: 100,
+                      padding: 5,
+                      position: "absolute",
+                      bottom: 0,
+                      right: 0,
+                    }}
+                  >
+                    <MaterialCommunityIcons
+                      name="image-edit"
+                      size={24}
+                      color={Colors.primary}
+                    />
+                  </Pressable>
+                </View>
+                <View style={[styles.inputGroup, { marginTop: 20 }]}>
                   <Text style={styles.label}>Name</Text>
                   <TextInput
                     style={styles.input}
@@ -165,7 +249,7 @@ export default function EditProfile() {
               </View>
 
               <View style={styles.upiContainer}>
-                <TouchableOpacity
+                <Pressable
                   onPress={() => setUpiCollapse(!upiCollapse)}
                   style={styles.upiHeader}
                 >
@@ -183,35 +267,87 @@ export default function EditProfile() {
                       color={Colors.primary}
                     />
                   )}
-                </TouchableOpacity>
-                {upiCollapse && (
-                  <>
-                    <View style={styles.upiDetails}>
-                      <Text style={styles.upiLabel}>UPI Id</Text>
-                      <View style={styles.upiIdContainer}>
-                        <Text style={styles.upiId}>7249048715@ybl</Text>
-                        <FontAwesome6 name="copy" size={20} color="black" />
-                      </View>
-                    </View>
-                    <View style={styles.upiQrContainer}>
-                      <Text style={styles.upiLabel}>UPI QR</Text>
-                      <TouchableOpacity
-                        style={styles.qrImageContainer}
-                        onPress={() => setIsVisible(true)}
-                      >
-                        <Image
-                          source={{
-                            uri: "https://qph.cf2.quoracdn.net/main-qimg-6f10dcab91fe9a768c8757381a98e9ae-pjlq",
-                          }}
-                          style={styles.qrImage}
+                </Pressable>
+                <>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>UPI Id</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="UPI"
+                      value={values.upiId}
+                      onChangeText={handleChange("upiId")}
+                      onBlur={handleBlur("upiId")}
+                    />
+                    {touched.upiId && errors.upiId && (
+                      <Text style={styles.error}>{errors.upiId}</Text>
+                    )}
+                  </View>
+                  <View style={styles.upiQrContainer}>
+                    <Text style={styles.upiLabel}>UPI QR</Text>
+                    {/* <Button
+                        title="Pick an image from camera roll"
+                        onPress={pickImage}
+                      /> */}
+                    <View
+                      style={{
+                        backgroundColor: "#e3eeec",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 0,
+                        padding: 20,
+                        borderRadius: 10,
+                        borderWidth: 1,
+                        borderColor: Colors.primary,
+                        borderStyle: "dashed",
+                      }}
+                    >
+                      {QRImage ? (
+                        <TouchableOpacity
+                          style={styles.qrImageContainer}
+                          onPress={() => setIsVisible(true)}
+                        >
+                          <Image
+                            source={{
+                              uri: QRImage,
+                            }}
+                            style={styles.qrImage}
+                          />
+                        </TouchableOpacity>
+                      ) : (
+                        <Entypo
+                          name="upload"
+                          size={24}
+                          color={Colors.primary}
                         />
-                      </TouchableOpacity>
+                      )}
+
+                      <Pressable
+                        onPress={pickImage}
+                        style={{
+                          // backgroundColor: Colors.primary,
+                          borderRadius: 6,
+                          padding: 8,
+                          paddingHorizontal: 16,
+                          alignItems: "center",
+                          alignSelf: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: Colors.primary,
+                            fontSize: 14,
+                            fontFamily: "inter-bold",
+                          }}
+                        >
+                          {QRImage ? "Change QR" : "Upload QR"}
+                        </Text>
+                      </Pressable>
                     </View>
-                  </>
-                )}
+                  </View>
+                </>
               </View>
 
-              <TouchableOpacity
+              <Pressable
                 style={styles.saveButton}
                 onPress={handleSubmit}
                 disabled={isSubmitting}
@@ -219,7 +355,7 @@ export default function EditProfile() {
                 <Text style={styles.saveButtonText}>
                   {isSubmitting ? "Saving..." : "Save Changes"}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
 
               <ImageView
                 images={[
@@ -235,6 +371,11 @@ export default function EditProfile() {
           )}
         </Formik>
       </ScrollView>
+      <ProfilePicUpload
+        modalVisible={openImageUploadDialog}
+        setModalVisible={setOpenImageUploadDialog}
+        handlePickImage={handlePickImage}
+      />
     </View>
   );
 }
@@ -269,7 +410,7 @@ const styles = StyleSheet.create({
     color: Colors.primary,
   },
   profileContainer: {
-    gap: 15,
+    gap: 0,
     backgroundColor: Colors.WHITE,
     borderWidth: 2,
     borderColor: "#eee",
@@ -278,29 +419,28 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   profileImage: {
-    width: 70,
-    height: 70,
+    width: 80,
+    height: 80,
     borderRadius: 100,
-    borderWidth: 2,
-    borderColor: Colors.primary,
-    alignSelf: "center",
   },
   inputGroup: {
-    marginTop: 20,
+    marginTop: 10,
   },
   label: {
     fontSize: 16,
-    fontFamily: "inter-bold",
+    fontFamily: "inter-medium",
     color: Colors.primary,
     marginBottom: 8,
   },
   input: {
     borderRadius: 8,
-    padding: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
     fontSize: 16,
-    fontFamily: "inter",
+    fontFamily: "inter-medium",
     borderWidth: 1,
-    borderColor: Colors.primary
+    borderColor: "#ccc",
+    color: Colors.BLACK,
   },
   error: {
     fontSize: 14,
@@ -357,9 +497,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   qrImage: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
+    width: 100,
+    height: 100,
+    resizeMode: "cover",
   },
   saveButton: {
     marginTop: 20,
@@ -367,7 +507,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 12,
     alignItems: "center",
-    marginBottom: 100
+    marginBottom: 100,
   },
   saveButtonText: {
     color: Colors.WHITE,
