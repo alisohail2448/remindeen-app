@@ -12,7 +12,7 @@ import { StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Swiper from "react-native-swiper";
 import { useDispatch, useSelector } from "react-redux";
-import { useAuthHook } from "../context/auth";
+import { useAuth } from "../context/auth";
 
 const images = [
   require("../../assets/images/MaskGroup.png"),
@@ -23,7 +23,7 @@ const images = [
 export default function Index() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { getUserProfile } = useAuthHook();
+  const { getUserProfile } = useAuth();
   const router = useRouter();
   const user = useSelector((state) => state?.user);
 

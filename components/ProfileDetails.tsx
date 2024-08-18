@@ -5,15 +5,18 @@ import {
   Image,
   TouchableOpacity,
   Button,
+  Pressable,
 } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
-import { Feather, FontAwesome6 } from "@expo/vector-icons";
+import { AntDesign, Feather, FontAwesome6 } from "@expo/vector-icons";
 import ImageView from "react-native-image-viewing";
 import { useSelector } from "react-redux";
+import { useAuth } from "@/app/context/auth";
 
 export default function ProfileDetails() {
   const user = useSelector((state) => state?.user);
+  const { signOut } = useAuth();
   const [upiCollapse, setUpiCollapse] = useState(false);
   const [visible, setIsVisible] = useState(false);
 
@@ -206,10 +209,9 @@ export default function ProfileDetails() {
           borderColor: "#eee",
           borderRadius: 10,
           padding: 16,
-          marginBottom: 40,
         }}
       >
-        <TouchableOpacity
+        <Pressable
           onPress={() => setUpiCollapse(!upiCollapse)}
           style={{
             gap: 1,
@@ -232,7 +234,7 @@ export default function ProfileDetails() {
           ) : (
             <Feather name="chevron-down" size={24} color={Colors.primary} />
           )}
-        </TouchableOpacity>
+        </Pressable>
         {upiCollapse && (
           <>
             <View
@@ -319,6 +321,39 @@ export default function ProfileDetails() {
             </View>
           </>
         )}
+      </View>
+
+      <View
+        style={{
+          marginTop: 20,
+          gap: 15,
+          backgroundColor: Colors.WHITE,
+          borderWidth: 2,
+          borderColor: "#eee",
+          borderRadius: 10,
+          padding: 16,
+          marginBottom: 40,
+        }}
+      >
+        <Pressable
+          onPress={signOut}
+          style={{
+            gap: 10,
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <AntDesign name="logout" size={18} color={Colors.primary} />
+          <Text
+            style={{
+              fontSize: 16,
+              fontFamily: "inter-bold",
+              color: Colors.primary,
+            }}
+          >
+            Sign Out
+          </Text>
+        </Pressable>
       </View>
 
       <ImageView

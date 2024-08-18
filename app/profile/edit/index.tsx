@@ -26,7 +26,7 @@ import * as ImagePicker from "expo-image-picker";
 import ProfilePicUpload from "@/components/ProfilePicUpload";
 import { useSelector } from "react-redux";
 import { uploadImage } from "@/services/upload";
-import { useAuthHook } from "@/app/context/auth";
+import { useAuth } from "@/app/context/auth";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string(),
@@ -43,7 +43,7 @@ const validationSchema = Yup.object().shape({
 export default function EditProfile() {
   const navigation = useNavigation();
   const user = useSelector((state) => state?.user);
-  const { token } = useAuthHook();
+  const { token } = useAuth();
   const [upiCollapse, setUpiCollapse] = useState(false);
   const [visible, setIsVisible] = useState(false);
   const [openImageUploadDialog, setOpenImageUploadDialog] = useState(false);

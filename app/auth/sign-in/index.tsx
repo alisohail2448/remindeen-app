@@ -16,7 +16,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { loginUser } from "@/services/auth";
 import { useDispatch } from "react-redux";
-import {  useAuthHook } from "@/app/context/auth";
+import {  useAuth } from "@/app/context/auth";
 
 const validationSchema = Yup.object().shape({
   phone: Yup.string()
@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
 export default function Index() {
   const navigation = useNavigation();
   const router = useRouter();
-  const { signIn } = useAuthHook(); 
+  const { signIn } = useAuth(); 
 
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);

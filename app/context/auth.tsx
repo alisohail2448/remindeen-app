@@ -23,7 +23,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function useAuthHook() {
+export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
@@ -100,7 +100,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setIsLoading(true);
     try {
       const data = await getUser(token, userId);
-      console.log("dattaa", data)
       if (data.user) {
         dispatch({
           type: "SET_SPATIAL_USER",
