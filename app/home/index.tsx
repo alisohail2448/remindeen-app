@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingTop: 40,
-    alignItems: 'center'
+    alignItems: "center",
   },
   profilePic: {
     flexDirection: "row",
