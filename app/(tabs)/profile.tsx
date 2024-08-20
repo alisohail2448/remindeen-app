@@ -5,10 +5,8 @@ import { Feather, FontAwesome6 } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import ProfileDetails from "@/components/ProfileDetails";
 
-
 export default function Index() {
   const navigation = useNavigation();
-
 
   useEffect(() => {
     navigation.setOptions({
@@ -41,7 +39,7 @@ export default function Index() {
             gap: 10,
           }}
         >
-          <Pressable
+          {/* <Pressable
             onPress={() => navigation.goBack()}
             style={{
               backgroundColor: "#e3eeec",
@@ -50,7 +48,7 @@ export default function Index() {
             }}
           >
             <Feather name="arrow-left" size={24} color="#004B40" />
-          </Pressable>
+          </Pressable> */}
           <Text
             style={{
               fontSize: 20,
@@ -61,7 +59,8 @@ export default function Index() {
             Profile
           </Text>
         </View>
-        <Pressable onPress={() => router.push('/profile/edit')}
+        <Pressable
+          onPress={() => router.push("/(profile)/edit")}
           style={{
             flexDirection: "row",
             alignItems: "center",

@@ -48,10 +48,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
             setToken(storedToken);
             setUserId(decodedToken.id);
             await getUserProfile(); 
-            router.push("/home");
+            router.push("/(tabs)/home");
           } else {
             await AsyncStorage.removeItem("jwtToken");
-            router.push("/auth/sign-in");
+            router.push("/(tabs)/home");
           }
         } else {
           router.push("/auth/sign-in");

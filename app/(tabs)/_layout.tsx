@@ -1,11 +1,19 @@
 import { View, Text } from "react-native";
-import React from "react";
-import { Tabs } from "expo-router";
+import React, { useEffect } from "react";
+import { Tabs, useNavigation } from "expo-router";
 import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import TabBar from "@/components/TabBar";
 
 export default () => {
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, []);
+
   return (
-    <Tabs
+    <Tabs tabBar={props => <TabBar {...props}/>} 
       screenOptions={{
         headerShown: false,
       }}
@@ -14,16 +22,17 @@ export default () => {
         name="home"
         options={{
           tabBarLabel: "Home",
+          headerShown: false,
           tabBarIcon: ({ focused }) =>
             focused ? (
               <Ionicons name="home" size={24} color="black" />
             ) : (
-                <Ionicons name="home-outline" size={24} color="black" />
+              <Ionicons name="home-outline" size={24} color="black" />
             ),
         }}
       />
       <Tabs.Screen
-        name="list"
+        name="profile"
         options={{
           tabBarLabel: "Profile",
           tabBarIcon: ({ focused }) =>
