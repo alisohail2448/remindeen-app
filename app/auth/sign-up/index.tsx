@@ -4,9 +4,9 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  ToastAndroid,
   ActivityIndicator,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation, router } from "expo-router";
@@ -17,11 +17,13 @@ import { DESIGNATION_TYPES } from "@/constants/constants";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { createAccount } from "@/services/auth";
+import { useToast } from "react-native-toast-notifications";
 
 export default function Index() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     navigation.setOptions({
@@ -46,20 +48,20 @@ export default function Index() {
       const data = await createAccount(values);
 
       if (data.success) {
-        ToastAndroid.show("Account created successfully", ToastAndroid.LONG);
+        toast.show("Account created successfully", {
+          type: "normal",
+        });
         router.push("/auth/sign-in");
       } else {
-        ToastAndroid.show(
-          data.msg || "Failed to create account",
-          ToastAndroid.LONG
-        );
+        toast.show(data.msg || "Failed to create account", {
+          type: "danger",
+        });
         console.log("Error:", data.msg); // Log the error message for debugging
       }
     } catch (error) {
-      ToastAndroid.show(
-        "An error occurred. Please try again later.",
-        ToastAndroid.LONG
-      );
+      toast.show("An error occurred. Please try again later", {
+        type: "danger",
+      });
       console.log("Unexpected error:", error);
     } finally {
       setLoading(false);
@@ -87,7 +89,7 @@ export default function Index() {
         touched,
       }) => (
         <ScrollView
-        showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
           style={{
             backgroundColor: "#fff",
             height: "100%",
@@ -107,11 +109,7 @@ export default function Index() {
           </View>
 
           <View style={{ marginTop: 40 }}>
-            <Text
-              style={styles.label}
-            >
-              Full Name
-            </Text>
+            <Text style={styles.label}>Full Name</Text>
             <TextInput
               style={styles.input}
               placeholder="Enter Name"
@@ -125,11 +123,7 @@ export default function Index() {
           </View>
 
           <View style={{ marginTop: 20 }}>
-            <Text
-              style={styles.label}
-            >
-              Phone
-            </Text>
+            <Text style={styles.label}>Phone</Text>
             <TextInput
               style={styles.input}
               placeholder="+91 9083427234"
@@ -144,11 +138,7 @@ export default function Index() {
           </View>
 
           <View style={{ marginTop: 20 }}>
-            <Text
-              style={styles.label}
-            >
-              Designation
-            </Text>
+            <Text style={styles.label}>Designation</Text>
             <SelectList
               setSelected={(val) => setFieldValue("designation", val)}
               data={DESIGNATION_TYPES}
@@ -167,39 +157,39 @@ export default function Index() {
           </View>
 
           <View style={{ marginTop: 20 }}>
-              <Text style={styles.label}>Password</Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  borderColor: Colors.primary,
-                }}
+            <Text style={styles.label}>Password</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                borderWidth: 1,
+                borderRadius: 10,
+                borderColor: Colors.primary,
+              }}
+            >
+              <TextInput
+                style={[styles.password, { flex: 1 }]}
+                placeholder="Enter Password"
+                secureTextEntry={!showPassword}
+                value={values.password}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+              />
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+                style={{ padding: 10 }}
               >
-                <TextInput
-                  style={[styles.password, { flex: 1 }]}
-                  placeholder="Enter Password"
-                  secureTextEntry={!showPassword}
-                  value={values.password}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
+                <Ionicons
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color={Colors.primary}
                 />
-                <TouchableOpacity
-                  onPress={() => setShowPassword(!showPassword)}
-                  style={{ padding: 10 }}
-                >
-                  <Ionicons
-                    name={showPassword ? "eye-off" : "eye"}
-                    size={24}
-                    color={Colors.primary}
-                  />
-                </TouchableOpacity>
-              </View>
-              {touched.password && errors.password && (
-                <Text style={styles.error}>{errors.password}</Text>
-              )}
+              </TouchableOpacity>
             </View>
+            {touched.password && errors.password && (
+              <Text style={styles.error}>{errors.password}</Text>
+            )}
+          </View>
 
           <TouchableOpacity
             style={styles.button}

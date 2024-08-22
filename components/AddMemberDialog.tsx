@@ -9,7 +9,6 @@ import {
   Pressable,
   View,
   TextInput,
-  ToastAndroid,
 } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -18,6 +17,7 @@ import { ROLETYPES } from "@/constants/constants";
 import { useAuth } from "@/app/context/auth";
 import { useSelector } from "react-redux";
 import { addUser } from "@/services/profile";
+import { useToast } from "react-native-toast-notifications";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string(),
@@ -30,6 +30,7 @@ const validationSchema = Yup.object().shape({
 const AddMemberDialog = ({ modalVisible, setModalVisible, fetchUsers }) => {
   const user = useSelector((state) => state?.user);
   const { token } = useAuth();
+  const toast = useToast();
 
   const handleProfileUpdate = async (values, { setSubmitting }) => {
     const addUserData = {
@@ -41,19 +42,21 @@ const AddMemberDialog = ({ modalVisible, setModalVisible, fetchUsers }) => {
 
     try {
       const data = await addUser(token, addUserData);
-      console.log("dataa", data)
       if (data.data) {
-        ToastAndroid.show("User added successfully", ToastAndroid.LONG);
+        toast.show("User added successfully", {
+          type: "normal",
+        });
         await fetchUsers();
         setModalVisible(false);
       } else {
-        ToastAndroid.show(data?.msg, ToastAndroid.LONG);
+        toast.show(data?.msg || "Failed to add user", {
+          type: "danger",
+        });
       }
     } catch (error) {
-      ToastAndroid.show(
-        "An error occurred. Please try again later.",
-        ToastAndroid.LONG
-      );
+      toast.show("An error occurred. Please try again later.", {
+        type: "danger",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -234,7 +237,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    // marginTop: 22,
   },
   modalView: {
     backgroundColor: "white",

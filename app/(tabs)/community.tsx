@@ -6,6 +6,7 @@ import {
   Image,
   ActivityIndicator,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { router, useNavigation } from "expo-router";
@@ -109,168 +110,96 @@ export default function Index() {
     );
 
   return (
-    <View
-      style={{
-        marginTop: 40,
-        padding: 16,
-        backgroundColor: "#FBFBFB",
-        height: "100%",
-        marginBottom: 40,
-      }}
-    >
+    <>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
+          paddingTop: 40,
+          padding: 16,
+          // flex: 1,
+          height: Dimensions.get("window").height,
+          backgroundColor: "#FBFBFB",
+          marginBottom: 40,
         }}
       >
         <View
           style={{
             flexDirection: "row",
+            justifyContent: "space-between",
             alignItems: "center",
-            gap: 10,
           }}
         >
-          <Text
+          <View
             style={{
-              fontSize: 20,
-              fontFamily: "inter-bold",
-              color: Colors.primary,
+              flexDirection: "column",
+              // alignItems: "center",
+              gap: 5,
             }}
           >
-            Community
-          </Text>
-        </View>
-        {isAdmin(user?.role) && (
-          <Pressable
-            onPress={() => setOpenAddDialog(true)}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              backgroundColor: Colors.primary,
-              padding: 8,
-              paddingHorizontal: 16,
-              borderRadius: 6,
-              gap: 6,
-            }}
-          >
-            <FontAwesome6 name="add" size={18} color={Colors.WHITE} />
             <Text
               style={{
-                fontSize: 15,
-                fontFamily: "inter-medium",
-                color: Colors.WHITE,
+                fontSize: 20,
+                fontFamily: "inter-bold",
+                color: Colors.primary,
               }}
             >
-              Add Member
+              Community
             </Text>
-          </Pressable>
-        )}
-      </View>
-      {isAdmin(user?.role) ? (
-        <Text
-          style={{
-            fontSize: 16,
-            fontFamily: "inter-medium",
-            color: Colors.primary,
-          }}
-        >
-          Manage Members
-        </Text>
-      ) : (
-        <Text
-          style={{
-            fontSize: 16,
-            fontFamily: "inter-medium",
-            color: Colors.primary,
-          }}
-        >
-          Your community
-        </Text>
-      )}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View>
-          <Pressable
-            onPress={() =>
-              isAdmin(user?.role)
-                ? router.push("/(tabs)/profile")
-                : router.push(`/(user)/${admin?._id}`)
-            }
-            style={{
-              backgroundColor: Colors.WHITE,
-              borderWidth: 2,
-              borderColor: "#eee",
-              borderRadius: 10,
-              marginTop: 20,
-              padding: 10,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 16 }}
-            >
-              <Image
-                style={{ width: 60, height: 60, borderRadius: 100 }}
-                source={
-                  admin?.profilePic
-                    ? {
-                        uri: admin?.profilePic,
-                      }
-                    : require("../../assets/images/profile.jpg")
-                }
-              />
-              <View style={{ gap: 4 }}>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 20,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 17,
-                      fontFamily: "inter-bold",
-                      color: Colors.primary,
-                    }}
-                  >
-                    {admin?.name}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontFamily: "inter-medium",
-                      color: Colors.primary,
-                      textTransform: "capitalize",
-                      backgroundColor: "#e3eeec",
-                      borderRadius: 12,
-                      paddingVertical: 1,
-                      paddingHorizontal: 14,
-                    }}
-                  >
-                    {admin?.role}
-                  </Text>
-                </View>
-                <Text
-                  style={{
-                    fontSize: 15,
-                    fontFamily: "inter-medium",
-                    color: "#1C5153",
-                  }}
-                >
-                  {admin?.designation}
-                </Text>
-              </View>
-            </View>
-            <Entypo name="chevron-right" size={20} color="#1C5153" />
-          </Pressable>
-
-          {subAdmin && (
+            {isAdmin(user?.role) ? (
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: "inter-medium",
+                  color: Colors.primary,
+                }}
+              >
+                Manage Members
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: "inter-medium",
+                  color: Colors.primary,
+                }}
+              >
+                Your community
+              </Text>
+            )}
+          </View>
+          {isAdmin(user?.role) && (
             <Pressable
-              onPress={() => router.push(`/(user)/${subAdmin?._id}`)}
+              onPress={() => setOpenAddDialog(true)}
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: Colors.primary,
+                padding: 8,
+                paddingHorizontal: 16,
+                borderRadius: 6,
+                gap: 6,
+              }}
+            >
+              <FontAwesome6 name="add" size={18} color={Colors.WHITE} />
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: "inter-medium",
+                  color: Colors.WHITE,
+                }}
+              >
+                Add Member
+              </Text>
+            </Pressable>
+          )}
+        </View>
+        <SafeAreaView>
+          <View>
+            <Pressable
+              onPress={() =>
+                isAdmin(user?.role)
+                  ? router.push("/(tabs)/profile")
+                  : router.push(`/(user)/${admin?._id}`)
+              }
               style={{
                 backgroundColor: Colors.WHITE,
                 borderWidth: 2,
@@ -284,20 +213,16 @@ export default function Index() {
               }}
             >
               <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 16,
-                }}
+                style={{ flexDirection: "row", alignItems: "center", gap: 16 }}
               >
                 <Image
                   style={{ width: 60, height: 60, borderRadius: 100 }}
                   source={
-                    subAdmin?.profilePic
+                    admin?.profilePic
                       ? {
-                          uri: subAdmin?.profilePic,
+                          uri: admin?.profilePic,
                         }
-                      : require("../../assets/images/subprofile.jpg")
+                      : require("../../assets/images/profile.jpg")
                   }
                 />
                 <View style={{ gap: 4 }}>
@@ -315,7 +240,7 @@ export default function Index() {
                         color: Colors.primary,
                       }}
                     >
-                      {subAdmin?.name}
+                      {admin?.name}
                     </Text>
                     <Text
                       style={{
@@ -329,7 +254,7 @@ export default function Index() {
                         paddingHorizontal: 14,
                       }}
                     >
-                      {subAdmin?.role === "subadmin" && "Sub Admin"}
+                      {admin?.role}
                     </Text>
                   </View>
                   <Text
@@ -339,56 +264,135 @@ export default function Index() {
                       color: "#1C5153",
                     }}
                   >
-                    {subAdmin?.designation}
+                    {admin?.designation}
                   </Text>
                 </View>
               </View>
               <Entypo name="chevron-right" size={20} color="#1C5153" />
             </Pressable>
-          )}
-        </View>
-        <View>
-          <Text
-            style={{
-              fontSize: 16,
-              fontFamily: "inter-bold",
-              color: Colors.primary,
-              marginTop: 20,
-            }}
-          >
-            Members
-          </Text>
-          <View
-            style={{
-              backgroundColor: Colors.WHITE,
-              borderWidth: 1,
-              borderColor: "#eee",
-              borderRadius: 10,
-              marginTop: 6,
-              paddingHorizontal: 10,
-              flexDirection: "column",
-            }}
-          >
-            {users?.length > 0 ? (
-              users?.map((regularUser, index, arr) => (
-                <MemberCard
-                  key={regularUser?._id}
-                  user={regularUser}
-                  index={index}
-                  array={arr}
-                />
-              ))
-            ) : (
-              <Text>There are no users!</Text>
+
+            {subAdmin && (
+              <Pressable
+                onPress={() => router.push(`/(user)/${subAdmin?._id}`)}
+                style={{
+                  backgroundColor: Colors.WHITE,
+                  borderWidth: 2,
+                  borderColor: "#eee",
+                  borderRadius: 10,
+                  marginTop: 20,
+                  padding: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 16,
+                  }}
+                >
+                  <Image
+                    style={{ width: 60, height: 60, borderRadius: 100 }}
+                    source={
+                      subAdmin?.profilePic
+                        ? {
+                            uri: subAdmin?.profilePic,
+                          }
+                        : require("../../assets/images/subprofile.jpg")
+                    }
+                  />
+                  <View style={{ gap: 4 }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 20,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 17,
+                          fontFamily: "inter-bold",
+                          color: Colors.primary,
+                        }}
+                      >
+                        {subAdmin?.name}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          fontFamily: "inter-medium",
+                          color: Colors.primary,
+                          textTransform: "capitalize",
+                          backgroundColor: "#e3eeec",
+                          borderRadius: 12,
+                          paddingVertical: 1,
+                          paddingHorizontal: 14,
+                        }}
+                      >
+                        {subAdmin?.role === "subadmin" && "Sub Admin"}
+                      </Text>
+                    </View>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontFamily: "inter-medium",
+                        color: "#1C5153",
+                      }}
+                    >
+                      {subAdmin?.designation}
+                    </Text>
+                  </View>
+                </View>
+                <Entypo name="chevron-right" size={20} color="#1C5153" />
+              </Pressable>
             )}
           </View>
-        </View>
-      </ScrollView>
+          <View>
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "inter-bold",
+                color: Colors.primary,
+                marginTop: 20,
+              }}
+            >
+              Members
+            </Text>
+            <View
+              style={{
+                backgroundColor: Colors.WHITE,
+                borderWidth: 1,
+                borderColor: "#eee",
+                borderRadius: 10,
+                marginTop: 6,
+                paddingHorizontal: 10,
+                flexDirection: "column",
+              }}
+            >
+              {users?.length > 0 ? (
+                users?.map((regularUser, index, arr) => (
+                  <MemberCard
+                    key={regularUser?._id}
+                    user={regularUser}
+                    index={index}
+                    array={arr}
+                  />
+                ))
+              ) : (
+                <Text>There are no users!</Text>
+              )}
+            </View>
+          </View>
+        </SafeAreaView>
+      </View>
       <AddMemberDialog
         modalVisible={openAddDialog}
         setModalVisible={setOpenAddDialog}
         fetchUsers={getUsers}
       />
-    </View>
+    </>
   );
 }

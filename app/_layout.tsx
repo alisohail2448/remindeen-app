@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { Provider } from "react-redux";
 import { AuthProvider } from "./context/auth";
+import { ToastProvider } from "react-native-toast-notifications";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -16,17 +17,25 @@ export default function RootLayout() {
   }
 
   return (
-    <Provider store={store}>
-      <AuthProvider>
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              headerShown: false,
+    <ToastProvider>
+      <Provider store={store}>
+        <AuthProvider>
+          <Stack
+            screenOptions={{
+              contentStyle: {
+                backgroundColor: "#fbfbfb",
+              },
             }}
-          />
-        </Stack>
-      </AuthProvider>
-    </Provider>
+          >
+            <Stack.Screen
+              name="index"
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack>
+        </AuthProvider>
+      </Provider>
+    </ToastProvider>
   );
 }

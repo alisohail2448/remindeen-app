@@ -19,6 +19,7 @@ export default () => {
     >
       <Tabs.Screen name="index" options={{ title: 'Home' }} />
       <Tabs.Screen name="community" options={{ title: 'Community' }} />
+      <Tabs.Screen name="chats" options={{ title: 'Chats' }} />
       <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
     </Tabs>
   );

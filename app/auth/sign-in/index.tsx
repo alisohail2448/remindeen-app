@@ -5,8 +5,10 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  ToastAndroid,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
 } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import { Colors } from "@/constants/Colors";
@@ -16,7 +18,8 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { loginUser } from "@/services/auth";
 import { useDispatch } from "react-redux";
-import {  useAuth } from "@/app/context/auth";
+import { useAuth } from "@/app/context/auth";
+import { useToast } from "react-native-toast-notifications";
 
 const validationSchema = Yup.object().shape({
   phone: Yup.string()
@@ -31,31 +34,34 @@ const validationSchema = Yup.object().shape({
 export default function Index() {
   const navigation = useNavigation();
   const router = useRouter();
-  const { signIn } = useAuth(); 
+  const { signIn } = useAuth();
+  const toast = useToast();
 
-  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const postUserLogin = async (values, { setSubmitting }) => {
     setSubmitting(true);
     setLoading(true);
-  
+
     try {
       const data = await loginUser(values);
-  
+
       if (data.token) {
-        await signIn(data.token); // Use the signIn method from context
-        ToastAndroid.show("Login successfully", ToastAndroid.LONG);
+        await signIn(data.token);
+        toast.show("User logged in successfully", {
+          type: "normal",
+        });
       } else {
-        ToastAndroid.show(data.msg || "Failed to login", ToastAndroid.LONG);
+        toast.show(data.msg || "Failed to login", {
+          type: "danger",
+        });
         console.log("Error:", data.msg);
       }
     } catch (error) {
-      ToastAndroid.show(
-        "An error occurred. Please try again later.",
-        ToastAndroid.LONG
-      );
+      toast.show("An error occurred. Please try again later", {
+        type: "danger",
+      });
       console.error("Login error:", error);
     } finally {
       setSubmitting(false);
@@ -70,111 +76,120 @@ export default function Index() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={{ marginTop: 100 }}>
-        <Text style={styles.title}>Lets Sign You In</Text>
-        <Text style={styles.subtitle}>Welcome Back</Text>
-        <Text style={styles.subtitle}>You've been missed!</Text>
-      </View>
-
-      <Formik
-        initialValues={{ phone: "", password: "" }}
-        validationSchema={validationSchema}
-        onSubmit={postUserLogin}
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-          isSubmitting,
-        }) => (
-          <>
-            <View style={{ marginTop: 40 }}>
-              <Text style={styles.label}>Phone</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="+91 9083427234"
-                value={values.phone}
-                onChangeText={handleChange("phone")}
-                onBlur={handleBlur("phone")}
-              />
-              {touched.phone && errors.phone && (
-                <Text style={styles.error}>{errors.phone}</Text>
-              )}
-            </View>
+        <View style={{ marginTop: 100 }}>
+          <Text style={styles.title}>Lets Sign You In</Text>
+          <Text style={styles.subtitle}>Welcome Back</Text>
+          <Text style={styles.subtitle}>You've been missed!</Text>
+        </View>
 
-            <View style={{ marginTop: 20 }}>
-              <Text style={styles.label}>Password</Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  borderColor: Colors.primary,
-                }}
-              >
+        <Formik
+          initialValues={{ phone: "", password: "" }}
+          validationSchema={validationSchema}
+          onSubmit={postUserLogin}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+            isSubmitting,
+          }) => (
+            <>
+              <View style={{ marginTop: 40 }}>
+                <Text style={styles.label}>Phone</Text>
                 <TextInput
-                  style={[styles.password, { flex: 1 }]}
-                  placeholder="Enter Password"
-                  secureTextEntry={!showPassword}
-                  value={values.password}
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
+                  style={styles.input}
+                  placeholder="+91 9083427234"
+                  value={values.phone}
+                  onChangeText={handleChange("phone")}
+                  onBlur={handleBlur("phone")}
                 />
-                <TouchableOpacity
-                  onPress={() => setShowPassword(!showPassword)}
-                  style={{ padding: 10 }}
-                >
-                  <Ionicons
-                    name={showPassword ? "eye-off" : "eye"}
-                    size={24}
-                    color={Colors.primary}
-                  />
-                </TouchableOpacity>
+                {touched.phone && errors.phone && (
+                  <Text style={styles.error}>{errors.phone}</Text>
+                )}
               </View>
-              {touched.password && errors.password && (
-                <Text style={styles.error}>{errors.password}</Text>
-              )}
-            </View>
 
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handleSubmit}
-              disabled={isSubmitting}
-            >
-              {loading ? (
-                <ActivityIndicator color={Colors.WHITE} />
-              ) : (
-                <>
-                  <Text style={styles.buttonText}>Sign In</Text>
-                  <Ionicons
-                    name="chevron-forward-outline"
-                    size={18}
-                    color={Colors.WHITE}
+              <View style={{ marginTop: 20 }}>
+                <Text style={styles.label}>Password</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    borderColor: Colors.primary,
+                  }}
+                >
+                  <TextInput
+                    style={[styles.password, { flex: 1 }]}
+                    placeholder="Enter Password"
+                    secureTextEntry={!showPassword}
+                    value={values.password}
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
                   />
-                </>
-              )}
-            </TouchableOpacity>
-          </>
-        )}
-      </Formik>
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={{ padding: 10 }}
+                  >
+                    <Ionicons
+                      name={showPassword ? "eye-off" : "eye"}
+                      size={24}
+                      color={Colors.primary}
+                    />
+                  </TouchableOpacity>
+                </View>
+                {touched.password && errors.password && (
+                  <Text style={styles.error}>{errors.password}</Text>
+                )}
+              </View>
 
-      <View>
-        <Text style={styles.registerText}>
-          Don't have any account?{" "}
-          <Text
-            onPress={() => router.push("/auth/sign-up")}
-            style={styles.registerLink}
-          >
-            Register
+              <TouchableOpacity
+                style={styles.button}
+                onPress={handleSubmit}
+                disabled={isSubmitting}
+              >
+                {loading ? (
+                  <ActivityIndicator color={Colors.WHITE} />
+                ) : (
+                  <>
+                    <Text style={styles.buttonText}>Sign In</Text>
+                    <Ionicons
+                      name="chevron-forward-outline"
+                      size={18}
+                      color={Colors.WHITE}
+                    />
+                  </>
+                )}
+              </TouchableOpacity>
+            </>
+          )}
+        </Formik>
+
+        <View>
+          <Text style={styles.registerText}>
+            Don't have any account?{" "}
+            <Text
+              onPress={() => router.push("/auth/sign-up")}
+              style={styles.registerLink}
+            >
+              Register
+            </Text>
           </Text>
-        </Text>
-      </View>
-    </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

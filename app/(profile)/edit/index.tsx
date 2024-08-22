@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   ScrollView,
   StyleSheet,
-  ToastAndroid,
   Pressable,
   Button,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "expo-router";
 import {
@@ -29,6 +29,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "@/services/profile";
 import { uploadImage } from "@/services/upload";
 import { useAuth } from "@/app/context/auth";
+import { useToast } from "react-native-toast-notifications";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string(),
@@ -46,6 +47,7 @@ export default function EditProfile() {
   const navigation = useNavigation();
   const user = useSelector((state) => state?.user);
   const { token, userId, getUserProfile } = useAuth();
+  const toast = useToast();
   const [upiCollapse, setUpiCollapse] = useState(false);
   const [visible, setIsVisible] = useState(false);
   const [openImageUploadDialog, setOpenImageUploadDialog] = useState(false);
@@ -77,17 +79,19 @@ export default function EditProfile() {
       const data = await updateUser(token, userId, updatedData);
       if (data.user) {
         getUserProfile();
-        ToastAndroid.show("Profile updated successfully", ToastAndroid.LONG);
+        toast.show("Profile updated successfully", {
+          type: "normal",
+        });
         navigation.goBack();
-      }
-      else{
-        ToastAndroid.show(data?.msg, ToastAndroid.LONG);
+      } else {
+        toast.show(data?.msg || "Failed to update profile", {
+          type: "danger",
+        });
       }
     } catch (error) {
-      ToastAndroid.show(
-        "An error occurred. Please try again later.",
-        ToastAndroid.LONG
-      );
+      toast.show("An error occurred. Please try again later.", {
+        type: "danger",
+      });
     } finally {
       setSubmitting(false);
     }
@@ -292,7 +296,11 @@ export default function EditProfile() {
                     value={values.designation}
                     onChangeText={handleChange("designation")}
                     onBlur={handleBlur("designation")}
-                    editable={(user?.role === 'admin' || user?.role === 'subadmin') ? false : true}
+                    editable={
+                      user?.role === "admin" || user?.role === "subadmin"
+                        ? false
+                        : true
+                    }
                   />
                   {touched.designation && errors.designation && (
                     <Text style={styles.error}>{errors.designation}</Text>
@@ -489,10 +497,11 @@ export default function EditProfile() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
+    paddingTop: 40,
     padding: 16,
+    // flex: 1,
+    height: Dimensions.get("window").height,
     backgroundColor: "#FBFBFB",
-    height: "100%",
     marginBottom: 40,
   },
   header: {

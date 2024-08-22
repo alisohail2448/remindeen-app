@@ -6,7 +6,6 @@ import {
   Dimensions,
   Image,
   Pressable,
-  ToastAndroid,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
@@ -18,11 +17,13 @@ import ImageView from "react-native-image-viewing";
 import { isAdmin } from "@/utils/helper";
 import { useSelector } from "react-redux";
 import RemoveUserDialog from "@/components/RemoveUserDialog";
+import { useToast } from "react-native-toast-notifications";
 
 export default function index() {
   const navigation = useNavigation();
   const { id } = useLocalSearchParams();
   const { token } = useAuth();
+  const toast = useToast();
   const appUser = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({});
@@ -61,17 +62,20 @@ export default function index() {
     try {
       const data = await removeUser(token, id, appUser?._id);
       if (data.status === 200) {
-        ToastAndroid.show("User removed successfully", ToastAndroid.LONG);
+        toast.show("User removed successfully", {
+          type: "normal",
+        });
         setOpenRemoveDialog(false);
         navigation.goBack();
       } else {
-        ToastAndroid.show(data?.msg, ToastAndroid.LONG);
+        toast.show(data?.msg || "Failed to remove user", {
+          type: "danger",
+        });
       }
     } catch (error) {
-      ToastAndroid.show(
-        "An error occurred. Plea  se try again later.",
-        ToastAndroid.LONG
-      );
+      toast.show("An error occurred. Please try again later.", {
+        type: "danger",
+      });
     } finally {
       setIsRemoving(false);
     }
@@ -81,10 +85,11 @@ export default function index() {
     <View>
       <View
         style={{
-          marginTop: 40,
+          paddingTop: 40,
           padding: 16,
+          // flex: 1,
+          height: Dimensions.get("window").height,
           backgroundColor: "#FBFBFB",
-          height: "100%",
           marginBottom: 40,
         }}
       >
@@ -102,7 +107,7 @@ export default function index() {
               gap: 10,
             }}
           >
-            <TouchableOpacity
+            <Pressable
               onPress={() => navigation.goBack()}
               style={{
                 backgroundColor: "#e3eeec",
@@ -111,7 +116,7 @@ export default function index() {
               }}
             >
               <Feather name="arrow-left" size={24} color={Colors.primary} />
-            </TouchableOpacity>
+            </Pressable>
             <Text
               style={{
                 fontSize: 20,
@@ -133,344 +138,350 @@ export default function index() {
             <ActivityIndicator color={Colors.primary} size={40} />
           </View>
         ) : (
-          <View
-            style={{
-              backgroundColor: Colors.WHITE,
-              borderWidth: 2,
-              borderColor: "#eee",
-              borderRadius: 10,
-              padding: 16,
-              marginTop: 20,
-            }}
-          >
+          <>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 14,
+                backgroundColor: Colors.WHITE,
+                borderWidth: 2,
+                borderColor: "#eee",
+                borderRadius: 10,
+                padding: 16,
+                marginTop: 20,
               }}
             >
               <View
                 style={{
-                  borderWidth: 2,
-                  borderColor: Colors.primary,
-                  padding: 5,
-                  borderRadius: 100,
-                  borderStyle: "dashed",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 14,
                 }}
               >
-                <Image
-                  style={{ width: 70, height: 70, borderRadius: 100 }}
-                  source={
-                    user?.profilePic
-                      ? {
-                          uri: user?.profilePic,
-                        }
-                      : require("../../../assets/images/subprofile.jpg")
-                  }
-                />
-              </View>
-              <View style={{ gap: 4 }}>
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 20,
+                    borderWidth: 2,
+                    borderColor: Colors.primary,
+                    padding: 5,
+                    borderRadius: 100,
+                    borderStyle: "dashed",
                   }}
                 >
-                  <Text
+                  <Image
+                    style={{ width: 70, height: 70, borderRadius: 100 }}
+                    source={
+                      user?.profilePic
+                        ? {
+                            uri: user?.profilePic,
+                          }
+                        : require("../../../assets/images/subprofile.jpg")
+                    }
+                  />
+                </View>
+                <View style={{ gap: 4 }}>
+                  <View
                     style={{
-                      fontSize: 18,
-                      fontFamily: "inter-bold",
-                      color: Colors.primary,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 20,
                     }}
                   >
-                    {user?.name}
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontFamily: "inter-bold",
+                        color: Colors.primary,
+                      }}
+                    >
+                      {user?.name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        fontFamily: "inter-medium",
+                        color: Colors.primary,
+                        textTransform: "capitalize",
+                        backgroundColor: "#e3eeec",
+                        borderRadius: 12,
+                        paddingVertical: 1,
+                        paddingHorizontal: 14,
+                      }}
+                    >
+                      {user?.role === "subadmin" ? "Sub Admin" : "Member"}
+                    </Text>
+                  </View>
                   <Text
                     style={{
-                      fontSize: 15,
+                      fontSize: 16,
                       fontFamily: "inter-medium",
                       color: Colors.primary,
-                      textTransform: "capitalize",
-                      backgroundColor: "#e3eeec",
-                      borderRadius: 12,
-                      paddingVertical: 1,
-                      paddingHorizontal: 14,
                     }}
                   >
-                    {user?.role === "subadmin" ? "Sub Admin" : "Member"}
+                    {user?.designation}
                   </Text>
                 </View>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "inter-medium",
-                    color: Colors.primary,
-                  }}
-                >
-                  {user?.designation}
-                </Text>
               </View>
-            </View>
 
-            <View
-              style={{
-                marginTop: 20,
-                gap: 15,
-              }}
-            >
-              <View style={{ gap: 1 }}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontFamily: "inter",
-                    color: "#5D8082",
-                  }}
-                >
-                  Phone
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "inter-medium",
-                    color: Colors.BLACK,
-                  }}
-                >
-                  {user?.phone}
-                </Text>
-              </View>
-              <View style={{ gap: 1 }}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontFamily: "inter",
-                    color: "#5D8082",
-                  }}
-                >
-                  Email
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "inter-medium",
-                    color: Colors.BLACK,
-                  }}
-                >
-                  {user?.email}
-                </Text>
-              </View>
-              <View style={{ gap: 1 }}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontFamily: "inter",
-                    color: "#5D8082",
-                  }}
-                >
-                  Mosque Name
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "inter-medium",
-                    color: Colors.BLACK,
-                  }}
-                >
-                  {user?.mosqueName}
-                </Text>
-              </View>
-              <View style={{ gap: 1 }}>
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontFamily: "inter",
-                    color: "#5D8082",
-                  }}
-                >
-                  Mosque Area
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "inter-medium",
-                    color: Colors.BLACK,
-                  }}
-                >
-                  {user?.mosqueArea}
-                </Text>
-              </View>
-            </View>
-
-            {isAdmin(user?.role) && (
               <View
                 style={{
                   marginTop: 20,
                   gap: 15,
-                  backgroundColor: Colors.WHITE,
-                  borderWidth: 2,
-                  borderColor: "#eee",
-                  borderRadius: 10,
-                  padding: 16,
                 }}
               >
-                <Pressable
-                  onPress={() => setUpiCollapse(!upiCollapse)}
-                  style={{
-                    gap: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
+                <View style={{ gap: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontFamily: "inter",
+                      color: "#5D8082",
+                    }}
+                  >
+                    Phone
+                  </Text>
                   <Text
                     style={{
                       fontSize: 16,
-                      fontFamily: "inter-bold",
-                      color: Colors.primary,
+                      fontFamily: "inter-medium",
+                      color: Colors.BLACK,
                     }}
                   >
-                    UPI Details
+                    {user?.phone}
                   </Text>
-                  {upiCollapse ? (
-                    <Feather
-                      name="chevron-up"
-                      size={24}
-                      color={Colors.primary}
-                    />
-                  ) : (
-                    <Feather
-                      name="chevron-down"
-                      size={24}
-                      color={Colors.primary}
-                    />
-                  )}
-                </Pressable>
-                {upiCollapse && (
-                  <>
-                    <View
+                </View>
+                <View style={{ gap: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontFamily: "inter",
+                      color: "#5D8082",
+                    }}
+                  >
+                    Email
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontFamily: "inter-medium",
+                      color: Colors.BLACK,
+                    }}
+                  >
+                    {user?.email}
+                  </Text>
+                </View>
+                <View style={{ gap: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontFamily: "inter",
+                      color: "#5D8082",
+                    }}
+                  >
+                    Mosque Name
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontFamily: "inter-medium",
+                      color: Colors.BLACK,
+                    }}
+                  >
+                    {user?.mosqueName}
+                  </Text>
+                </View>
+                <View style={{ gap: 1 }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontFamily: "inter",
+                      color: "#5D8082",
+                    }}
+                  >
+                    Mosque Area
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontFamily: "inter-medium",
+                      color: Colors.BLACK,
+                    }}
+                  >
+                    {user?.mosqueArea}
+                  </Text>
+                </View>
+              </View>
+
+              {isAdmin(user?.role) && (
+                <View
+                  style={{
+                    marginTop: 20,
+                    gap: 15,
+                    backgroundColor: Colors.WHITE,
+                    borderWidth: 2,
+                    borderColor: "#eee",
+                    borderRadius: 10,
+                    padding: 16,
+                  }}
+                >
+                  <Pressable
+                    onPress={() => setUpiCollapse(!upiCollapse)}
+                    style={{
+                      gap: 1,
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
                       style={{
-                        gap: 4,
+                        fontSize: 16,
+                        fontFamily: "inter-bold",
+                        color: Colors.primary,
                       }}
                     >
-                      {!user?.upi?.id && !user?.upi?.qr && (
-                        <Text
-                          style={{
-                            fontSize: 14,
-                            fontFamily: "inter",
-                            color: Colors.BLACK,
-                          }}
-                        >
-                          There is no upi details! Add the details.
-                        </Text>
-                      )}
-                      {user?.upi?.id && (
-                        <>
+                      UPI Details
+                    </Text>
+                    {upiCollapse ? (
+                      <Feather
+                        name="chevron-up"
+                        size={24}
+                        color={Colors.primary}
+                      />
+                    ) : (
+                      <Feather
+                        name="chevron-down"
+                        size={24}
+                        color={Colors.primary}
+                      />
+                    )}
+                  </Pressable>
+                  {upiCollapse && (
+                    <>
+                      <View
+                        style={{
+                          gap: 4,
+                        }}
+                      >
+                        {!user?.upi?.id && !user?.upi?.qr && (
                           <Text
                             style={{
                               fontSize: 14,
                               fontFamily: "inter",
-                              color: "#5D8082",
+                              color: Colors.BLACK,
                             }}
                           >
-                            UPI Id
+                            There is no upi details! Add the details.
                           </Text>
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              gap: 10,
-                              alignItems: "center",
-                            }}
-                          >
+                        )}
+                        {user?.upi?.id && (
+                          <>
                             <Text
                               style={{
-                                fontSize: 16,
-                                fontFamily: "inter-medium",
-                                color: Colors.primary,
-                                backgroundColor: "#e3eeec",
-                                borderRadius: 12,
-                                paddingVertical: 8,
-                                paddingHorizontal: 14,
+                                fontSize: 14,
+                                fontFamily: "inter",
+                                color: "#5D8082",
                               }}
                             >
-                              {user?.upi?.id}
+                              UPI Id
                             </Text>
-                            <FontAwesome6 name="copy" size={20} color="black" />
-                          </View>
-                        </>
-                      )}
-                    </View>
-                    <View style={{ gap: 4, marginTop: 10 }}>
-                      {user?.upi?.qr && (
-                        <>
-                          <Text
-                            style={{
-                              fontSize: 14,
-                              fontFamily: "inter",
-                              color: "#5D8082",
-                            }}
-                          >
-                            UPI QR
-                          </Text>
-                          <TouchableOpacity
-                            style={{
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                            onPress={() => setIsVisible(true)}
-                          >
-                            <Image
-                              source={{
-                                uri: user?.upi?.qr,
-                              }}
+                            <View
                               style={{
-                                width: 200,
-                                height: 200,
-                                objectFit: "contain",
+                                flexDirection: "row",
+                                gap: 10,
+                                alignItems: "center",
                               }}
-                            />
-                          </TouchableOpacity>
-                        </>
-                      )}
-                    </View>
-                  </>
-                )}
+                            >
+                              <Text
+                                style={{
+                                  fontSize: 16,
+                                  fontFamily: "inter-medium",
+                                  color: Colors.primary,
+                                  backgroundColor: "#e3eeec",
+                                  borderRadius: 12,
+                                  paddingVertical: 8,
+                                  paddingHorizontal: 14,
+                                }}
+                              >
+                                {user?.upi?.id}
+                              </Text>
+                              <FontAwesome6
+                                name="copy"
+                                size={20}
+                                color="black"
+                              />
+                            </View>
+                          </>
+                        )}
+                      </View>
+                      <View style={{ gap: 4, marginTop: 10 }}>
+                        {user?.upi?.qr && (
+                          <>
+                            <Text
+                              style={{
+                                fontSize: 14,
+                                fontFamily: "inter",
+                                color: "#5D8082",
+                              }}
+                            >
+                              UPI QR
+                            </Text>
+                            <TouchableOpacity
+                              style={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                              onPress={() => setIsVisible(true)}
+                            >
+                              <Image
+                                source={{
+                                  uri: user?.upi?.qr,
+                                }}
+                                style={{
+                                  width: 200,
+                                  height: 200,
+                                  objectFit: "contain",
+                                }}
+                              />
+                            </TouchableOpacity>
+                          </>
+                        )}
+                      </View>
+                    </>
+                  )}
+                </View>
+              )}
+            </View>
+            {isAdmin(appUser?.role) && (
+              <View>
+                <Pressable
+                  onPress={() => setOpenRemoveDialog(true)}
+                  style={{
+                    flexDirection: "row",
+                    alignSelf: "center",
+                    backgroundColor: Colors.primary,
+                    padding: 8,
+                    paddingHorizontal: 16,
+                    borderRadius: 6,
+                    gap: 6,
+                    marginTop: 20,
+                  }}
+                  disabled={isRemoving}
+                >
+                  <Ionicons
+                    name="person-remove-outline"
+                    size={20}
+                    color={Colors.WHITE}
+                  />
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontFamily: "inter-medium",
+                      color: Colors.WHITE,
+                    }}
+                  >
+                    {isRemoving ? "Removing..." : "Remove User"}
+                  </Text>
+                </Pressable>
               </View>
             )}
-          </View>
-        )}
-        {isAdmin(appUser?.role) && (
-          <View>
-            <Pressable
-              onPress={() => setOpenRemoveDialog(true)}
-              style={{
-                flexDirection: "row",
-                alignSelf: "center",
-                backgroundColor: Colors.primary,
-                padding: 8,
-                paddingHorizontal: 16,
-                borderRadius: 6,
-                gap: 6,
-                marginTop: 20,
-              }}
-              disabled={isRemoving}
-            >
-              <Ionicons
-                name="person-remove-outline"
-                size={20}
-                color={Colors.WHITE}
-              />
-              <Text
-                style={{
-                  fontSize: 15,
-                  fontFamily: "inter-medium",
-                  color: Colors.WHITE,
-                }}
-              >
-                {isRemoving ? "Removing..." : "Remove User"}
-              </Text>
-            </Pressable>
-          </View>
+          </>
         )}
       </View>
 

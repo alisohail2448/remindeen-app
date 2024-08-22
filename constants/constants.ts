@@ -29,4 +29,5 @@
     export const GET_MY_ADMIN=`${SERVER_URL}/auth/admin/`;
     export const POST_ADD_USER=`${SERVER_URL}/auth/user/add`;
     export const POST_REMOVE_USER=`${SERVER_URL}/auth/admin/`;
+    export const GET_MESSAGES=`${SERVER_URL}/auth/message/`;
 

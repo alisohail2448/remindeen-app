@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Button,
   Pressable,
+  SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
@@ -21,17 +22,17 @@ export default function ProfileDetails() {
   const [visible, setIsVisible] = useState(false);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <View style={{ marginBottom: 50 }}  >
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
-          gap: 14,
+          gap: 10,
           backgroundColor: Colors.WHITE,
           borderWidth: 2,
           borderColor: "#eee",
           borderRadius: 10,
-          padding: 16,
+          padding: 12 ,
         }}
       >
         <View
@@ -44,7 +45,7 @@ export default function ProfileDetails() {
           }}
         >
           <Image
-            style={{ width: 70, height: 70, borderRadius: 100 }}
+            style={{ width: 60, height: 60, borderRadius: 100 }}
             source={
               user?.profilePic
                 ? {
@@ -374,6 +375,6 @@ export default function ProfileDetails() {
           onRequestClose={() => setIsVisible(false)}
         />
       )}
-    </ScrollView>
+    </View>
   );
 }
