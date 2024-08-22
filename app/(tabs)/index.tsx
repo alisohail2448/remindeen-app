@@ -29,8 +29,7 @@ export default function Index() {
 
   useEffect(() => {
     getUserProfile();
-  }, [])
-  
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -42,13 +41,20 @@ export default function Index() {
     <>
       <View style={styles.container}>
         <View style={styles.profileContainer}>
-          <TouchableOpacity
-            onPress={() => router.push("/profile")}
-            style={styles.profilePic}
-          >
+          <View style={styles.profilePic}>
             <Image
               style={{ width: 50, height: 50, borderRadius: 100 }}
-              source={require("../../assets/images/profile.png")}
+              source={
+                user?.profilePic
+                  ? {
+                      uri: user?.profilePic,
+                    }
+                  : user?.role === "admin"
+                  ? require("../../assets/images/profile.jpg")
+                  : user?.role === "subadmin"
+                  ? require("../../assets/images/subprofile.jpg")
+                  : require("../../assets/images/user.jpg")
+              }
             />
             <View style={{ gap: 5 }}>
               <Text style={styles.textTitle}>Assalam Alaikum!</Text>
@@ -59,7 +65,7 @@ export default function Index() {
                 </Text>
               </Text>
             </View>
-          </TouchableOpacity>
+          </View>
           <View>
             <Link href={"/notification"}>
               <Ionicons name="notifications" size={30} color="#EAAF67" />
@@ -167,10 +173,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#102A2B",
   },
   scrollView: {
-    marginHorizontal: 20,
+    marginHorizontal: 10,
   },
   profileContainer: {
-    marginTop: 26,
+    marginTop: 10,
     padding: 10,
     flexDirection: "row",
     justifyContent: "space-between",

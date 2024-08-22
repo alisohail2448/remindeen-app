@@ -10,6 +10,7 @@ import {
   ToastAndroid,
   Pressable,
   Button,
+  ActivityIndicator,
 } from "react-native";
 import { useNavigation } from "expo-router";
 import {
@@ -24,7 +25,8 @@ import * as Yup from "yup";
 import ImageView from "react-native-image-viewing";
 import * as ImagePicker from "expo-image-picker";
 import ProfilePicUpload from "@/components/ProfilePicUpload";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "@/services/profile";
 import { uploadImage } from "@/services/upload";
 import { useAuth } from "@/app/context/auth";
 
@@ -43,7 +45,7 @@ const validationSchema = Yup.object().shape({
 export default function EditProfile() {
   const navigation = useNavigation();
   const user = useSelector((state) => state?.user);
-  const { token } = useAuth();
+  const { token, userId, getUserProfile } = useAuth();
   const [upiCollapse, setUpiCollapse] = useState(false);
   const [visible, setIsVisible] = useState(false);
   const [openImageUploadDialog, setOpenImageUploadDialog] = useState(false);
@@ -58,8 +60,7 @@ export default function EditProfile() {
   }, []);
 
   const handleProfileUpdate = async (values, { setSubmitting }) => {
-    console.log("valuees", values);
-    const data = {
+    const updatedData = {
       name: values?.name,
       designation: values?.designation,
       phone: values?.phone,
@@ -73,10 +74,15 @@ export default function EditProfile() {
       profilePic: profileImage,
     };
     try {
-      // Perform the update operation here, e.g., an API call
-      // await updateProfile(values);
-      // ToastAndroid.show("Profile updated successfully", ToastAndroid.LONG);
-      // navigation.goBack(); // Go back to the profile screen after update
+      const data = await updateUser(token, userId, updatedData);
+      if (data.user) {
+        getUserProfile();
+        ToastAndroid.show("Profile updated successfully", ToastAndroid.LONG);
+        navigation.goBack();
+      }
+      else{
+        ToastAndroid.show(data?.msg, ToastAndroid.LONG);
+      }
     } catch (error) {
       ToastAndroid.show(
         "An error occurred. Please try again later.",
@@ -96,13 +102,25 @@ export default function EditProfile() {
     });
 
     if (!result.canceled) {
-      setQRImage(result.assets[0].uri);
+      const { uri, type, fileName } = result.assets[0];
+
+      setQRImage(uri);
+
+      const formData = new FormData();
+      formData.append("image", {
+        uri,
+        type: `${type}/${uri.split(".").pop()}`,
+        name: fileName || `image.${uri.split(".").pop()}`,
+      });
+
+      uploadQR(formData);
     }
   };
 
   const handlePickImage = async (pickerType) => {
     setOpenImageUploadDialog(false);
     let result;
+
     if (pickerType === "library") {
       result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -116,14 +134,19 @@ export default function EditProfile() {
         quality: 1,
       });
     }
+
     if (!result.canceled) {
-      setProfileImage(result.assets[0].uri);
+      const { uri, type, fileName } = result.assets[0];
+
+      setProfileImage(uri);
+
       const formData = new FormData();
       formData.append("image", {
-        uri: result.assets[0].uri,
-        type: result.assets[0].type,
-        name: result.assets[0].fileName,
-      })
+        uri,
+        type: `${type}/${uri.split(".").pop()}`,
+        name: fileName || `image.${uri.split(".").pop()}`,
+      });
+
       uploadProfilePic(formData);
     }
   };
@@ -131,10 +154,30 @@ export default function EditProfile() {
   const uploadProfilePic = async (formData) => {
     setIsUploading(true);
     try {
-      const data = await uploadImage(token, formData);
-      if(data.data){
-        setProfileImage(data.data);
+      const response = await uploadImage(token, formData);
+      if (response && response.url) {
+        setProfileImage(response.url);
+      } else {
+        console.log("Upload failed:", response);
       }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const uploadQR = async (formData) => {
+    setIsUploading(true);
+    try {
+      const response = await uploadImage(token, formData);
+      if (response && response.url) {
+        setQRImage(response.url);
+      } else {
+        console.log("Upload failed:", response);
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
     } finally {
       setIsUploading(false);
     }
@@ -187,6 +230,7 @@ export default function EditProfile() {
                     alignSelf: "center",
                     borderRadius: 100,
                     padding: 5,
+                    position: "relative",
                   }}
                 >
                   <Image
@@ -196,9 +240,19 @@ export default function EditProfile() {
                         ? {
                             uri: profileImage,
                           }
-                        : require("../../../assets/images/profile.png")
+                        : user?.role === "admin"
+                        ? require("../../../assets/images/profile.jpg")
+                        : user?.role === "subadmin"
+                        ? require("../../../assets/images/subprofile.jpg")
+                        : require("../../../assets/images/user.jpg")
                     }
                   />
+                  {isUploading && (
+                    <ActivityIndicator
+                      style={{ position: "absolute", left: 35, top: "40%" }}
+                      color={Colors.WHITE}
+                    />
+                  )}
                   <Pressable
                     onPress={() => setOpenImageUploadDialog(true)}
                     style={{
@@ -238,6 +292,7 @@ export default function EditProfile() {
                     value={values.designation}
                     onChangeText={handleChange("designation")}
                     onBlur={handleBlur("designation")}
+                    editable={(user?.role === 'admin' || user?.role === 'subadmin') ? false : true}
                   />
                   {touched.designation && errors.designation && (
                     <Text style={styles.error}>{errors.designation}</Text>

@@ -47,7 +47,7 @@ export default function Index() {
 
       if (data.success) {
         ToastAndroid.show("Account created successfully", ToastAndroid.LONG);
-        router.push("/home");
+        router.push("/auth/sign-in");
       } else {
         ToastAndroid.show(
           data.msg || "Failed to create account",

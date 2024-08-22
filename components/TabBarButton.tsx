@@ -36,6 +36,7 @@ const TabBarButton = (props) => {
                 color,
                 fontSize: 12,
                 fontFamily: "inter-medium",
+                textTransform: 'capitalize'
               },
             ]}
           >

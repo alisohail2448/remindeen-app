@@ -6,7 +6,6 @@ import { Colors } from "@/constants/Colors";
 import { BlurView } from "expo-blur";
 
 const TabBar = ({ state, descriptors, navigation }) => {
-  const primaryColor = Colors.primary;
   const greyColor = Colors.GRAY;
 
   return (
@@ -46,7 +45,6 @@ const TabBar = ({ state, descriptors, navigation }) => {
         return (
           <TabBarButton
             key={route.name}
-            style={styles.tabbarItem}
             onPress={onPress}
             onLongPress={onLongPress}
             isFocused={isFocused}

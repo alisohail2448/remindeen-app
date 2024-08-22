@@ -47,8 +47,14 @@ export default function ProfileDetails() {
             style={{ width: 70, height: 70, borderRadius: 100 }}
             source={
               user?.profilePic
-                ? user?.profilePic
-                : require("../assets/images/profile.png")
+                ? {
+                    uri: user?.profilePic,
+                  }
+                  : user?.role === "admin"
+                  ? require("../assets/images/profile.jpg")
+                  : user?.role === "subadmin"
+                  ? require("../assets/images/subprofile.jpg")
+                  : require("../assets/images/user.jpg")
             }
           />
         </View>
@@ -356,16 +362,18 @@ export default function ProfileDetails() {
         </Pressable>
       </View>
 
-      <ImageView
-        images={[
-          {
-            uri: "https://qph.cf2.quoracdn.net/main-qimg-6f10dcab91fe9a768c8757381a98e9ae-pjlq",
-          },
-        ]}
-        imageIndex={0}
-        visible={visible}
-        onRequestClose={() => setIsVisible(false)}
-      />
+      {user?.upi?.qr && (
+        <ImageView
+          images={[
+            {
+              uri: user?.upi?.qr,
+            },
+          ]}
+          imageIndex={0}
+          visible={visible}
+          onRequestClose={() => setIsVisible(false)}
+        />
+      )}
     </ScrollView>
   );
 }

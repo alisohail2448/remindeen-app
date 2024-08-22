@@ -48,10 +48,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
             setToken(storedToken);
             setUserId(decodedToken.id);
             await getUserProfile(); 
-            router.push("/(tabs)/home");
+            router.push("/(tabs)/");
           } else {
             await AsyncStorage.removeItem("jwtToken");
-            router.push("/(tabs)/home");
+            router.push("/(tabs)/");
           }
         } else {
           router.push("/auth/sign-in");
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setToken(newToken);
       setUserId(decodedToken.id);
       await getUserProfile();
-      router.push("/home");
+      router.push("/(tabs)/");
     } catch (error) {
       console.log("Sign-in failed", error);
     }
