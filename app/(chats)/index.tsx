@@ -259,7 +259,7 @@ export default function index() {
             <TextInput
               style={{
                 borderRadius: 8,
-                paddingVertical: 8,
+                paddingVertical: Platform.OS === 'ios' ? 12 : 8,
                 paddingHorizontal: 8,
                 fontSize: 16,
                 fontFamily: "inter-medium",

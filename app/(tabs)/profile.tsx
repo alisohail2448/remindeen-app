@@ -1,4 +1,4 @@
-import { View, Text, Pressable, SafeAreaView, Dimensions, ScrollView } from "react-native";
+import { View, Text, Pressable, SafeAreaView, Dimensions, ScrollView, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useNavigation } from "expo-router";
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
@@ -17,7 +17,7 @@ export default function Index() {
   return (
     <ScrollView showsVerticalScrollIndicator={false} 
       style={{
-        paddingTop: 40,
+        paddingTop: Platform.OS === 'ios' ? 60 : 40,
         padding: 16,
         // flex: 1,
         height: Dimensions.get('window').height,

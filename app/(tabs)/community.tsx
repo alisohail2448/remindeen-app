@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
   Dimensions,
   SafeAreaView,
+  Platform,
+  StyleSheet,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { router, useNavigation } from "expo-router";
@@ -113,7 +115,7 @@ export default function Index() {
     <>
       <View
         style={{
-          paddingTop: 40,
+          paddingTop: Platform.OS === "ios" ? 60 : 40,
           padding: 16,
           // flex: 1,
           height: Dimensions.get("window").height,
@@ -242,20 +244,9 @@ export default function Index() {
                     >
                       {admin?.name}
                     </Text>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        fontFamily: "inter-medium",
-                        color: Colors.primary,
-                        textTransform: "capitalize",
-                        backgroundColor: "#e3eeec",
-                        borderRadius: 12,
-                        paddingVertical: 1,
-                        paddingHorizontal: 14,
-                      }}
-                    >
-                      {admin?.role}
-                    </Text>
+                    <View style={styles.viewTag}>
+                      <Text style={styles.textTag}>{admin?.role}</Text>
+                    </View>
                   </View>
                   <Text
                     style={{
@@ -320,20 +311,11 @@ export default function Index() {
                       >
                         {subAdmin?.name}
                       </Text>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          fontFamily: "inter-medium",
-                          color: Colors.primary,
-                          textTransform: "capitalize",
-                          backgroundColor: "#e3eeec",
-                          borderRadius: 12,
-                          paddingVertical: 1,
-                          paddingHorizontal: 14,
-                        }}
-                      >
-                        {subAdmin?.role === "subadmin" && "Sub Admin"}
-                      </Text>
+                      <View style={styles.viewTag}>
+                        <Text style={styles.textTag}>
+                          {subAdmin?.role === "subadmin" && "Sub Admin"}
+                        </Text>
+                      </View>
                     </View>
                     <Text
                       style={{
@@ -396,3 +378,20 @@ export default function Index() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  viewTag: {
+    backgroundColor: "#e3eeec",
+    borderRadius: 12,
+    paddingVertical: 2,
+    paddingHorizontal: 14,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textTag: {
+    fontSize: 14,
+    fontFamily: "inter-medium",
+    color: Colors.primary,
+    textTransform: "capitalize",
+  },
+});

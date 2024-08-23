@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   Button,
+  Platform,
   Pressable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -268,6 +269,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     backgroundColor: "#102A2B",
+    paddingTop: Platform.OS === 'ios' ? 20 : 0,
   },
   scrollView: {
     marginHorizontal: 10,

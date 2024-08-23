@@ -22,7 +22,7 @@ export default function ProfileDetails() {
   const [visible, setIsVisible] = useState(false);
 
   return (
-    <View style={{ marginBottom: 50 }}  >
+    <View style={{ marginBottom: 50 }}>
       <View
         style={{
           flexDirection: "row",
@@ -32,7 +32,7 @@ export default function ProfileDetails() {
           borderWidth: 2,
           borderColor: "#eee",
           borderRadius: 10,
-          padding: 12 ,
+          padding: 12,
         }}
       >
         <View
@@ -51,11 +51,11 @@ export default function ProfileDetails() {
                 ? {
                     uri: user?.profilePic,
                   }
-                  : user?.role === "admin"
-                  ? require("../assets/images/profile.jpg")
-                  : user?.role === "subadmin"
-                  ? require("../assets/images/subprofile.jpg")
-                  : require("../assets/images/user.jpg")
+                : user?.role === "admin"
+                ? require("../assets/images/profile.jpg")
+                : user?.role === "subadmin"
+                ? require("../assets/images/subprofile.jpg")
+                : require("../assets/images/user.jpg")
             }
           />
         </View>
@@ -76,20 +76,27 @@ export default function ProfileDetails() {
             >
               {user?.name}
             </Text>
-            <Text
+            <View
               style={{
-                fontSize: 15,
-                fontFamily: "inter-medium",
-                color: Colors.primary,
-                textTransform: "capitalize",
                 backgroundColor: "#e3eeec",
                 borderRadius: 12,
                 paddingVertical: 1,
                 paddingHorizontal: 14,
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              {user?.role}
-            </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: "inter-medium",
+                  color: Colors.primary,
+                  textTransform: "capitalize",
+                }}
+              >
+                {user?.role}
+              </Text>
+            </View>
           </View>
           <Text
             style={{
@@ -278,19 +285,25 @@ export default function ProfileDetails() {
                       alignItems: "center",
                     }}
                   >
-                    <Text
+                    <View
                       style={{
-                        fontSize: 16,
-                        fontFamily: "inter-medium",
-                        color: Colors.primary,
                         backgroundColor: "#e3eeec",
                         borderRadius: 12,
                         paddingVertical: 8,
                         paddingHorizontal: 14,
+                        overflow: "hidden",
                       }}
                     >
-                      {user?.upi?.id}
-                    </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontFamily: "inter-medium",
+                          color: Colors.primary,
+                        }}
+                      >
+                        {user?.upi?.id}
+                      </Text>
+                    </View>
                     <FontAwesome6 name="copy" size={20} color="black" />
                   </View>
                 </>

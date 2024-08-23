@@ -6,6 +6,7 @@ import {
   Dimensions,
   Image,
   Pressable,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
@@ -85,7 +86,7 @@ export default function index() {
     <View>
       <View
         style={{
-          paddingTop: 40,
+          paddingTop: Platform.OS === "ios" ? 60 : 40,
           padding: 16,
           // flex: 1,
           height: Dimensions.get("window").height,
@@ -388,19 +389,25 @@ export default function index() {
                                 alignItems: "center",
                               }}
                             >
-                              <Text
+                              <View
                                 style={{
-                                  fontSize: 16,
-                                  fontFamily: "inter-medium",
-                                  color: Colors.primary,
                                   backgroundColor: "#e3eeec",
                                   borderRadius: 12,
                                   paddingVertical: 8,
                                   paddingHorizontal: 14,
+                                  overflow: "hidden", 
                                 }}
                               >
-                                {user?.upi?.id}
-                              </Text>
+                                <Text
+                                  style={{
+                                    fontSize: 16,
+                                    fontFamily: "inter-medium",
+                                    color: Colors.primary,
+                                  }}
+                                >
+                                  {user?.upi?.id}
+                                </Text>
+                              </View>
                               <FontAwesome6
                                 name="copy"
                                 size={20}

@@ -11,6 +11,7 @@ import {
   Button,
   ActivityIndicator,
   Dimensions,
+  Platform,
 } from "react-native";
 import { useNavigation } from "expo-router";
 import {
@@ -30,6 +31,7 @@ import { updateUser } from "@/services/profile";
 import { uploadImage } from "@/services/upload";
 import { useAuth } from "@/app/context/auth";
 import { useToast } from "react-native-toast-notifications";
+
 
 const validationSchema = Yup.object().shape({
   name: Yup.string(),
@@ -124,7 +126,7 @@ export default function EditProfile() {
   const handlePickImage = async (pickerType) => {
     setOpenImageUploadDialog(false);
     let result;
-
+    
     if (pickerType === "library") {
       result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -497,7 +499,7 @@ export default function EditProfile() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 40,
+    paddingTop: Platform.OS === 'ios' ? 60 : 40,
     padding: 16,
     // flex: 1,
     height: Dimensions.get("window").height,

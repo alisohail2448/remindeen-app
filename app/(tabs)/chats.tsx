@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, Pressable } from "react-native";
+import { View, Text, Dimensions, Pressable, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -37,7 +37,7 @@ export default function Index() {
   return (
     <View
       style={{
-        paddingTop: 40,
+        paddingTop: Platform.OS === 'ios' ? 60 : 40,
         padding: 16,
         // flex: 1,
         height: Dimensions.get("window").height,

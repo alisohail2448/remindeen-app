@@ -46,7 +46,6 @@ export default function Index() {
 
     try {
       const data = await loginUser(values);
-
       if (data.token) {
         await signIn(data.token);
         toast.show("User logged in successfully", {
@@ -56,7 +55,7 @@ export default function Index() {
         toast.show(data.msg || "Failed to login", {
           type: "danger",
         });
-        console.log("Error:", data.msg);
+        console.log("Error:", data);
       }
     } catch (error) {
       toast.show("An error occurred. Please try again later", {
