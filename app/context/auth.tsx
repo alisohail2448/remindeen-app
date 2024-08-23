@@ -38,32 +38,32 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [userId, setUserId] = useState<string | undefined>(undefined);
   const [token, setToken] = useState<string | undefined>(undefined);
 
-  useEffect(() => {
-    const checkToken = async () => {
-      try {
-        const storedToken = await AsyncStorage.getItem("jwtToken");
-        if (storedToken) {
-          const decodedToken = jwtDecode(storedToken);
-          if (decodedToken.exp * 1000 > Date.now()) {
-            setToken(storedToken);
-            setUserId(decodedToken.id);
-            await getUserProfile(); 
-            router.push("/(tabs)/");
-          } else {
-            await AsyncStorage.removeItem("jwtToken");
-            router.push("/(tabs)/");
-          }
+  const checkToken = async () => {
+    try {
+      const storedToken = await AsyncStorage.getItem("jwtToken");
+      if (storedToken) {
+        const decodedToken = jwtDecode(storedToken);
+        if (decodedToken.exp * 1000 > Date.now()) {
+          setToken(storedToken);
+          setUserId(decodedToken.id);
+          await getUserProfile(); 
+          router.push("/(tabs)/");
         } else {
+          await AsyncStorage.removeItem("jwtToken");
           router.push("/auth/sign-in");
         }
-      } catch (error) {
-        console.log("Token verification failed", error);
+      } else {
         router.push("/auth/sign-in");
-      } finally {
-        setIsLoading(false);
       }
-    };
+    } catch (error) {
+      console.log("Token verification failed", error);
+      router.push("/auth/sign-in");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     checkToken();
   }, [router]);
 
@@ -86,8 +86,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setToken(undefined);
       setUserId(undefined);
       dispatch({
-        type: "SET_SPATIAL_USER",
-        payload: null,
+        type: "CLEAR_FIELDS",
       });
       router.push("/auth/sign-in");
     } catch (error) {

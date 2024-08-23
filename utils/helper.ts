@@ -1,3 +1,25 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {jwtDecode} from "jwt-decode";
+import { router } from "expo-router";
+
+export const isTokenExpired = async (token) => {
+  if (!token) {
+    await AsyncStorage.removeItem("jwtToken");
+    router.push("/auth/sign-in");
+    return true;
+  }
+
+  const decodedToken = jwtDecode(token);
+
+  if (decodedToken.exp * 1000 < Date.now()) {
+    await AsyncStorage.removeItem("jwtToken");
+    router.push("/auth/sign-in");
+    return true;
+  }
+
+  return false;
+};
+
 export const isAdmin = (role) => {
   return role === "admin";
 };

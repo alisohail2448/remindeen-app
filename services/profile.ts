@@ -9,9 +9,14 @@ import {
   POST_REMOVE_USER,
   PUT_USER_PROFILE,
 } from "@/constants/constants";
+import { isTokenExpired } from "@/utils/helper";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 export const getUser = async (token, userId) => {
+  const tokenExpired = await isTokenExpired(token);
+  if (tokenExpired) return { msg: "Session expired, please sign in again", success: false };
+
   try {
     const URL = `${GET_USER_PROFILE}${userId}`;
     const response = await axios.get(URL, {
@@ -32,6 +37,8 @@ export const getUser = async (token, userId) => {
 };
 
 export const updateUser = async (token, userId, data) => {
+  const tokenExpired = await isTokenExpired(token);
+  if (tokenExpired) return { msg: "Session expired, please sign in again", success: false };
   try {
     const URL = `${PUT_USER_PROFILE}${userId}`;
     const response = await axios.put(
@@ -56,6 +63,8 @@ export const updateUser = async (token, userId, data) => {
 };
 
 export const getSubAdmin = async (token, adminId) => {
+  const tokenExpired = await isTokenExpired(token);
+  if (tokenExpired) return { msg: "Session expired, please sign in again", success: false };
   try {
     const URL = `${GET_SUB_ADMIN}${adminId}`;
     const response = await axios.get(URL, {
@@ -76,6 +85,8 @@ export const getSubAdmin = async (token, adminId) => {
 };
 
 export const getRegularusers = async (token, adminId) => {
+  const tokenExpired = await isTokenExpired(token);
+  if (tokenExpired) return { msg: "Session expired, please sign in again", success: false };
   try {
     const URL = `${GET_REGULAR_USERS}${adminId}`;
     const response = await axios.get(URL, {
@@ -96,6 +107,8 @@ export const getRegularusers = async (token, adminId) => {
 };
 
 export const getMyAdmin = async (token, userId) => {
+  const tokenExpired = await isTokenExpired(token);
+  if (tokenExpired) return { msg: "Session expired, please sign in again", success: false };
   try {
     const URL = `${GET_MY_ADMIN}${userId}`;
     const response = await axios.get(URL, {
@@ -116,6 +129,8 @@ export const getMyAdmin = async (token, userId) => {
 };
 
 export const addUser = async (token, data) => {
+  const tokenExpired = await isTokenExpired(token);
+  if (tokenExpired) return { msg: "Session expired, please sign in again", success: false };
   try {
     const response = await axios.post(POST_ADD_USER, data, {
       headers: {
@@ -135,6 +150,8 @@ export const addUser = async (token, data) => {
 };
 
 export const removeUser = async (token, userId, adminId) => {
+  const tokenExpired = await isTokenExpired(token);
+  if (tokenExpired) return { msg: "Session expired, please sign in again", success: false };
   try {
     const url = `${POST_REMOVE_USER}${adminId}/user/${userId}`;
     const response = await axios.delete(url, {

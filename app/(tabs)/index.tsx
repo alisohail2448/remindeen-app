@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   Button,
+  Pressable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigation, useRouter } from "expo-router";
@@ -13,6 +14,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Swiper from "react-native-swiper";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../context/auth";
+import { Colors } from "@/constants/Colors";
+import { Entypo } from "@expo/vector-icons";
 
 const images = [
   require("../../assets/images/MaskGroup.png"),
@@ -66,102 +69,196 @@ export default function Index() {
               </Text>
             </View>
           </View>
-          <View>
+          {/* <View>
             <Link href={"/notification"}>
               <Ionicons name="notifications" size={30} color="#EAAF67" />
             </Link>
-          </View>
+          </View> */}
         </View>
-        <Swiper
-          loop={true}
-          autoplay={true}
-          showsPagination={false}
-          // dotColor="#fff"
-          // activeDotColor="#000"
+        <View style={{ height: 200 }}>
+          <Swiper loop={true} autoplay={true} showsPagination={false}>
+            {images.map((image, index) =>
+              index === 0 ? (
+                <View key={index} style={styles.imageStyle}>
+                  <View style={styles.tasbeehCounter}>
+                    <View style={{ marginBottom: 10 }}>
+                      <Text style={{ fontSize: 14, fontFamily: "inter" }}>
+                        Remember Allah
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          fontFamily: "inter",
+                          fontWeight: "bold",
+                          width: 150,
+                        }}
+                      >
+                        Start Tasbih Counter
+                      </Text>
+                    </View>
+                    <View style={{ marginTop: 30 }}>
+                      <TouchableOpacity
+                        style={styles.getStartedBtn}
+                        onPress={() => router.push("/(qibla)")}
+                      >
+                        <Text style={styles.buttonText}>Get Start Now</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <Image
+                      source={require("../../assets/images/MaskGroup.png")}
+                      style={{
+                        width: 150,
+                        height: 150,
+                        position: "absolute",
+                        right: 0,
+                      }}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <View key={index} style={styles.imageStyle}>
+                  <View style={styles.tasbeehCounter}>
+                    <View style={{ marginBottom: 10 }}>
+                      <Text style={{ fontSize: 14, fontFamily: "inter" }}>
+                        Remember Allah
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          fontFamily: "inter-bold",
+                        }}
+                      >
+                        Start This
+                      </Text>
+                    </View>
+                    <View style={{ marginTop: 30 }}>
+                      <TouchableOpacity
+                        style={styles.getStartedBtn}
+                        onPress={() => router.push("/(qibla)")}
+                      >
+                        <Text style={styles.buttonText}>Get Start Now</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <Image
+                      source={require("../../assets/images/MaskGroup.png")}
+                      style={{
+                        width: 150,
+                        height: 150,
+                        position: "absolute",
+                        right: 0,
+                      }}
+                    />
+                  </View>
+                </View>
+              )
+            )}
+          </Swiper>
+        </View>
+
+        <View
+          style={{
+            backgroundColor: Colors.WHITE,
+            flex: 1,
+            borderTopRightRadius: 30,
+            borderTopLeftRadius: 30,
+            padding: 20,
+            paddingTop: 30,
+            gap: 20,
+          }}
         >
-          {images.map((image, index) =>
-            index === 0 ? (
-              <View key={index} style={styles.imageStyle}>
-                <View style={styles.tasbeehCounter}>
-                  <View style={{ marginBottom: 10 }}>
-                    <Text style={{ fontSize: 14, fontFamily: "inter" }}>
-                      Remember Allah
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontFamily: "inter",
-                        fontWeight: "bold",
-                        width: 150,
-                      }}
-                    >
-                      Start Tasbih Counter
-                    </Text>
-                  </View>
-                  <View style={{ marginTop: 30 }}>
-                    <TouchableOpacity
-                      style={styles.getStartedBtn}
-                      onPress={() => router.push("/tasbih")}
-                    >
-                      <Text style={styles.buttonText}>Get Start Now</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <Image
-                    source={require("../../assets/images/MaskGroup.png")}
-                    style={{
-                      width: 150,
-                      height: 150,
-                      position: "absolute",
-                      right: 0,
-                    }}
-                  />
-                </View>
+          <Pressable
+            onPress={() => router.push("/(qibla)")}
+            style={{
+              backgroundColor: "#E3EEEC",
+              borderWidth: 1,
+              borderColor: "#eee",
+              borderRadius: 10,
+              padding: 14,
+              paddingVertical: 16,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 12 }}
+            >
+              <Image
+                source={require("../../assets/images/qibla.png")}
+                style={{ width: 60, height: 60 }}
+              />
+
+              <View>
+                <Text
+                  style={{
+                    fontFamily: "inter-bold",
+                    color: Colors.primary,
+                    fontSize: 18,
+                  }}
+                >
+                  Qibla Finder
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "inter-medium",
+                    color: Colors.primary,
+                    fontSize: 14,
+                  }}
+                >
+                  Right Direction for Your Prayers
+                </Text>
               </View>
-            ) : (
-              <View key={index} style={styles.imageStyle}>
-                <View style={styles.tasbeehCounter}>
-                  <View style={{ marginBottom: 10 }}>
-                    <Text style={{ fontSize: 14, fontFamily: "inter" }}>
-                      Remember Allah
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontFamily: "inter",
-                        fontWeight: "bold",
-                        width: 150,
-                      }}
-                    >
-                      Start This
-                    </Text>
-                  </View>
-                  <View style={{ marginTop: 30 }}>
-                    <TouchableOpacity
-                      style={styles.getStartedBtn}
-                      onPress={() => router.push("/tasbih")}
-                    >
-                      <Text style={styles.buttonText}>Get Start Now</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <Image
-                    source={require("../../assets/images/MaskGroup.png")}
-                    style={{
-                      width: 150,
-                      height: 150,
-                      position: "absolute",
-                      right: 0,
-                    }}
-                  />
-                </View>
+            </View>
+            <Entypo name="chevron-right" size={20} color="#1C5153" />
+          </Pressable>
+
+          <Pressable
+            onPress={() => router.push("/(qibla)")}
+            style={{
+              backgroundColor: "#E3EEEC",
+              borderWidth: 1,
+              borderColor: "#eee",
+              borderRadius: 10,
+              padding: 14,
+              paddingVertical: 16,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 12 }}
+            >
+              <Image
+                source={require("../../assets/images/tasbih.png")}
+                style={{ width: 50, height: 50 }}
+              />
+
+              <View>
+                <Text
+                  style={{
+                    fontFamily: "inter-bold",
+                    color: Colors.primary,
+                    fontSize: 18,
+                  }}
+                >
+                  Tasbih Counter
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "inter-medium",
+                    color: Colors.primary,
+                    fontSize: 14,
+                  }}
+                >
+                  Track of Your Dhikr Effortlessly
+                </Text>
               </View>
-            )
-          )}
-        </Swiper>
-        <View>
-          <Text>Footer Section</Text>
+            </View>
+            <Entypo name="chevron-right" size={20} color="#1C5153" />
+          </Pressable>
         </View>
       </View>
-      <View></View>
     </>
   );
 }
@@ -211,7 +308,6 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: "#F6AF58",
     borderRadius: 13,
-    marginTop: 50,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",

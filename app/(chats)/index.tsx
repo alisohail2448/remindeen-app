@@ -11,7 +11,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigation } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
@@ -19,15 +19,20 @@ import { useSelector } from "react-redux";
 import { getRelativeTime, isAdmin } from "@/utils/helper";
 import { useAuth } from "../context/auth";
 import { getMyAdmin, getUser } from "@/services/profile";
-import { getMessages } from "@/services/messages";
+import { getMessages, sendMessage } from "@/services/messages";
+import { useToast } from "react-native-toast-notifications";
 
 export default function index() {
   const navigation = useNavigation();
   const user = useSelector((state) => state?.user);
   const { token } = useAuth();
+  const toast = useToast();
+  const flatListRef = useRef(null);
   const [admin, setAdmin] = useState();
   const [groupMessages, setGroupMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -35,6 +40,14 @@ export default function index() {
     });
   }, []);
 
+  useEffect(() => {
+    if (groupMessages.length > 0) {
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    }
+  }, [groupMessages]);
+  
   const getAdmin = async () => {
     if (!token) return;
     if (user?.role === "admin") return;
@@ -74,6 +87,33 @@ export default function index() {
     getUserMessages();
   }, [user, token, admin]);
 
+  const sendUserMessage = async () => {
+    setIsSending(true);
+    if (!token) return;
+    const adminId = user?.role === "admin" ? user?._id : admin?._id;
+    const messageData = {
+      sender: user?._id,
+      content: message,
+    };
+    try {
+      const data = await sendMessage(token, adminId, messageData);
+      if (data?.user) {
+        setMessage("");
+        getUserMessages();
+      } else {
+        toast.show(data.msg || "Failed to Send Message", {
+          type: "danger",
+        });
+      }
+    } catch (error) {
+      toast.show(error?.message || "Failed to send message", {
+        type: "danger",
+      });
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   const renderMessage = ({ item }) => {
     const isUserMessage = item.sender?._id === user?._id;
     return (
@@ -112,8 +152,8 @@ export default function index() {
             paddingHorizontal: 10,
             // borderRadius: 6,
             borderTopRightRadius: 6,
-            borderTopLeftRadius: 6,
-            borderBottomLeftRadius: isUserMessage ? 6 : 0,
+            borderTopLeftRadius:  isUserMessage ? 6 : 0,
+            borderBottomLeftRadius: 6,
             borderBottomRightRadius: !isUserMessage ? 6 : 0,
             position: "relative",
           }}
@@ -206,6 +246,7 @@ export default function index() {
           </View>
         ) : (
           <FlatList
+          ref={flatListRef}
             data={groupMessages}
             renderItem={renderMessage}
             keyExtractor={(item) => item?._id}
@@ -228,17 +269,25 @@ export default function index() {
                 color: Colors.primary,
                 flex: 1,
               }}
+              value={message}
+              onChangeText={(text) => setMessage(text)}
               placeholder="Type a message"
               multiline={true}
             />
             <TouchableOpacity
+              onPress={sendUserMessage}
               style={{
                 backgroundColor: Colors.primary,
                 padding: 10,
                 borderRadius: 6,
               }}
+              disabled={isSending}
             >
-              <Ionicons name="send" size={26} color={Colors.WHITE} />
+              {isSending ? (
+                <ActivityIndicator color={Colors.WHITE} />
+              ) : (
+                <Ionicons name="send" size={26} color={Colors.WHITE} />
+              )}
             </TouchableOpacity>
           </View>
         </View>

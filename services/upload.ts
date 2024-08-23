@@ -1,7 +1,10 @@
 import { POST_UPLOAD_IMAGE } from "@/constants/constants";
+import { isTokenExpired } from "@/utils/helper";
 import axios from "axios";
 
 export const uploadImage = async (token, formData) => {
+  const tokenExpired = await isTokenExpired(token);
+  if (tokenExpired) return { msg: "Session expired, please sign in again", success: false };
   try {
     const response = await axios.post(POST_UPLOAD_IMAGE, formData, {
       headers: {
