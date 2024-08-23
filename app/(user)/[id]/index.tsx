@@ -166,7 +166,7 @@ export default function index() {
                   }}
                 >
                   <Image
-                    style={{ width: 70, height: 70, borderRadius: 100 }}
+                    style={{ width: 60, height: 60, borderRadius: 100 }}
                     source={
                       user?.profilePic
                         ? {
@@ -195,14 +195,14 @@ export default function index() {
                     </Text>
                     <Text
                       style={{
-                        fontSize: 15,
+                        fontSize: 14,
                         fontFamily: "inter-medium",
                         color: Colors.primary,
                         textTransform: "capitalize",
                         backgroundColor: "#e3eeec",
                         borderRadius: 12,
                         paddingVertical: 1,
-                        paddingHorizontal: 14,
+                        paddingHorizontal: 10,
                       }}
                     >
                       {user?.role === "subadmin" ? "Sub Admin" : "Member"}

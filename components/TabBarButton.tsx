@@ -23,7 +23,7 @@ const TabBarButton = (props) => {
 
   return (
     <Pressable {...props} style={styles.container}>
-      <View style={{  alignItems: 'center', gap: 2, paddingVertical: 0, paddingHorizontal: 16, borderRadius: 20 }}>
+      <View style={{  alignItems: 'center', gap: 2, paddingVertical: 0, paddingHorizontal: 10, borderRadius: 20 }}>
         <Animated.View >
           {icons[routeName]({
             color,
