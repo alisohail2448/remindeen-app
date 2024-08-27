@@ -5,6 +5,7 @@ import {
   Pressable,
   Platform,
   StatusBar,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect } from "react";
 import { Colors } from "@/constants/Colors";
@@ -22,16 +23,16 @@ export default function index() {
   }, []);
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <StatusBar barStyle="light-content" />
-
       <View
         style={{
           paddingTop: Platform.OS === "ios" ? 60 : 40,
           padding: 16,
-          height: Dimensions.get("window").height,
+          // height: Dimensions.get("window").height,
+          flex: 1,
           backgroundColor: "#102A2B",
-          marginBottom: 40,
+          // marginBottom: 40,
         }}
       >
         <View
@@ -64,11 +65,12 @@ export default function index() {
         <View
           style={{
             marginTop: 30,
+            flex: 1,
           }}
         >
           <TasbihCounter />
         </View>
       </View>
-    </>
+    </SafeAreaView>
   );
 }

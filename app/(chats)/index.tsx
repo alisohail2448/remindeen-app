@@ -236,7 +236,7 @@ export default function index() {
       <KeyboardAvoidingView
         style={{ flex: 1, backgroundColor: "#f8f8f8" }}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        // keyboardVerticalOffset={30}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0} 
       >
         {isLoading ? (
           <View

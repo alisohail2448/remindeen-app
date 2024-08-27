@@ -32,7 +32,6 @@ import { uploadImage } from "@/services/upload";
 import { useAuth } from "@/app/context/auth";
 import { useToast } from "react-native-toast-notifications";
 
-
 const validationSchema = Yup.object().shape({
   name: Yup.string(),
   designation: Yup.string(),
@@ -126,7 +125,7 @@ export default function EditProfile() {
   const handlePickImage = async (pickerType) => {
     setOpenImageUploadDialog(false);
     let result;
-    
+
     if (pickerType === "library") {
       result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -190,316 +189,318 @@ export default function EditProfile() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.headerContent}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <Feather name="arrow-left" size={24} color={Colors.primary} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Edit Profile</Text>
+    <>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.headerContent}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}
+            >
+              <Feather name="arrow-left" size={24} color={Colors.primary} />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Edit Profile</Text>
+          </View>
         </View>
-      </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Formik
-          initialValues={{
-            name: user?.name,
-            designation: user?.designation,
-            phone: user?.phone,
-            email: user?.email,
-            mosqueName: user?.mosqueName,
-            mosqueArea: user?.mosqueArea,
-            upiId: user?.upi?.id,
-          }}
-          validationSchema={validationSchema}
-          onSubmit={handleProfileUpdate}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-            isSubmitting,
-          }) => (
-            <>
-              <View style={styles.profileContainer}>
-                <View
-                  style={{
-                    borderWidth: 2,
-                    borderColor: Colors.primary,
-                    borderStyle: "dashed",
-                    alignSelf: "center",
-                    borderRadius: 100,
-                    padding: 5,
-                    position: "relative",
-                  }}
-                >
-                  <Image
-                    style={styles.profileImage}
-                    source={
-                      profileImage
-                        ? {
-                            uri: profileImage,
-                          }
-                        : user?.role === "admin"
-                        ? require("../../../assets/images/profile.jpg")
-                        : user?.role === "subadmin"
-                        ? require("../../../assets/images/subprofile.jpg")
-                        : require("../../../assets/images/user.jpg")
-                    }
-                  />
-                  {isUploading && (
-                    <ActivityIndicator
-                      style={{ position: "absolute", left: 35, top: "40%" }}
-                      color={Colors.WHITE}
-                    />
-                  )}
-                  <Pressable
-                    onPress={() => setOpenImageUploadDialog(true)}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Formik
+            initialValues={{
+              name: user?.name,
+              designation: user?.designation,
+              phone: user?.phone,
+              email: user?.email,
+              mosqueName: user?.mosqueName,
+              mosqueArea: user?.mosqueArea,
+              upiId: user?.upi?.id,
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleProfileUpdate}
+          >
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              errors,
+              touched,
+              isSubmitting,
+            }) => (
+              <>
+                <View style={styles.profileContainer}>
+                  <View
                     style={{
-                      backgroundColor: "#e3eeec",
+                      borderWidth: 2,
+                      borderColor: Colors.primary,
+                      borderStyle: "dashed",
+                      alignSelf: "center",
                       borderRadius: 100,
                       padding: 5,
-                      position: "absolute",
-                      bottom: 0,
-                      right: 0,
+                      position: "relative",
                     }}
                   >
-                    <MaterialCommunityIcons
-                      name="image-edit"
-                      size={24}
-                      color={Colors.primary}
+                    <Image
+                      style={styles.profileImage}
+                      source={
+                        profileImage
+                          ? {
+                              uri: profileImage,
+                            }
+                          : user?.role === "admin"
+                          ? require("../../../assets/images/profile.jpg")
+                          : user?.role === "subadmin"
+                          ? require("../../../assets/images/subprofile.jpg")
+                          : require("../../../assets/images/user.jpg")
+                      }
                     />
-                  </Pressable>
-                </View>
-                <View style={[styles.inputGroup, { marginTop: 20 }]}>
-                  <Text style={styles.label}>Name</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Name"
-                    value={values.name}
-                    onChangeText={handleChange("name")}
-                    onBlur={handleBlur("name")}
-                  />
-                  {touched.name && errors.name && (
-                    <Text style={styles.error}>{errors.name}</Text>
-                  )}
-                </View>
-                <View style={[styles.inputGroup]}>
-                  <Text style={styles.label}>Designation</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Designation"
-                    value={values.designation}
-                    onChangeText={handleChange("designation")}
-                    onBlur={handleBlur("designation")}
-                    editable={
-                      user?.role === "admin" || user?.role === "subadmin"
-                        ? false
-                        : true
-                    }
-                  />
-                  {touched.designation && errors.designation && (
-                    <Text style={styles.error}>{errors.designation}</Text>
-                  )}
-                </View>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Phone</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Phone"
-                    value={values.phone}
-                    onChangeText={handleChange("phone")}
-                    onBlur={handleBlur("phone")}
-                  />
-                  {touched.phone && errors.phone && (
-                    <Text style={styles.error}>{errors.phone}</Text>
-                  )}
-                </View>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Email</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    value={values.email}
-                    onChangeText={handleChange("email")}
-                    onBlur={handleBlur("email")}
-                    keyboardType="email-address"
-                  />
-                  {touched.email && errors.email && (
-                    <Text style={styles.error}>{errors.email}</Text>
-                  )}
-                </View>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Mosque Name</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Mosque Name"
-                    value={values.mosqueName}
-                    onChangeText={handleChange("mosqueName")}
-                    onBlur={handleBlur("mosqueName")}
-                  />
-                  {touched.mosqueName && errors.mosqueName && (
-                    <Text style={styles.error}>{errors.mosqueName}</Text>
-                  )}
-                </View>
-                <View style={styles.inputGroup}>
-                  <Text style={styles.label}>Mosque Area</Text>
-                  <TextInput
-                    style={[styles.input, { textAlignVertical: "top" }]}
-                    placeholder="Mosque Area"
-                    value={values.mosqueArea}
-                    multiline
-                    numberOfLines={4}
-                    onChangeText={handleChange("mosqueArea")}
-                    onBlur={handleBlur("mosqueArea")}
-                  />
-                  {touched.mosqueArea && errors.mosqueArea && (
-                    <Text style={styles.error}>{errors.mosqueArea}</Text>
-                  )}
-                </View>
-              </View>
-
-              <View style={styles.upiContainer}>
-                <Pressable
-                  onPress={() => setUpiCollapse(!upiCollapse)}
-                  style={styles.upiHeader}
-                >
-                  <Text style={styles.upiTitle}>UPI Details</Text>
-                  {upiCollapse ? (
-                    <Feather
-                      name="chevron-up"
-                      size={24}
-                      color={Colors.primary}
-                    />
-                  ) : (
-                    <Feather
-                      name="chevron-down"
-                      size={24}
-                      color={Colors.primary}
-                    />
-                  )}
-                </Pressable>
-                <>
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.label}>UPI Id</Text>
+                    {isUploading && (
+                      <ActivityIndicator
+                        style={{ position: "absolute", left: 35, top: "40%" }}
+                        color={Colors.WHITE}
+                      />
+                    )}
+                    <Pressable
+                      onPress={() => setOpenImageUploadDialog(true)}
+                      style={{
+                        backgroundColor: "#e3eeec",
+                        borderRadius: 100,
+                        padding: 5,
+                        position: "absolute",
+                        bottom: 0,
+                        right: 0,
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name="image-edit"
+                        size={24}
+                        color={Colors.primary}
+                      />
+                    </Pressable>
+                  </View>
+                  <View style={[styles.inputGroup, { marginTop: 20 }]}>
+                    <Text style={styles.label}>Name</Text>
                     <TextInput
                       style={styles.input}
-                      placeholder="UPI"
-                      value={values.upiId}
-                      onChangeText={handleChange("upiId")}
-                      onBlur={handleBlur("upiId")}
+                      placeholder="Name"
+                      value={values.name}
+                      onChangeText={handleChange("name")}
+                      onBlur={handleBlur("name")}
                     />
-                    {touched.upiId && errors.upiId && (
-                      <Text style={styles.error}>{errors.upiId}</Text>
+                    {touched.name && errors.name && (
+                      <Text style={styles.error}>{errors.name}</Text>
                     )}
                   </View>
-                  <View style={styles.upiQrContainer}>
-                    <Text style={styles.upiLabel}>UPI QR</Text>
-                    {/* <Button
+                  <View style={[styles.inputGroup]}>
+                    <Text style={styles.label}>Designation</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Designation"
+                      value={values.designation}
+                      onChangeText={handleChange("designation")}
+                      onBlur={handleBlur("designation")}
+                      editable={
+                        user?.role === "admin" || user?.role === "subadmin"
+                          ? false
+                          : true
+                      }
+                    />
+                    {touched.designation && errors.designation && (
+                      <Text style={styles.error}>{errors.designation}</Text>
+                    )}
+                  </View>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Phone</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Phone"
+                      value={values.phone}
+                      onChangeText={handleChange("phone")}
+                      onBlur={handleBlur("phone")}
+                    />
+                    {touched.phone && errors.phone && (
+                      <Text style={styles.error}>{errors.phone}</Text>
+                    )}
+                  </View>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Email</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Email"
+                      value={values.email}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
+                      keyboardType="email-address"
+                    />
+                    {touched.email && errors.email && (
+                      <Text style={styles.error}>{errors.email}</Text>
+                    )}
+                  </View>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Mosque Name</Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Mosque Name"
+                      value={values.mosqueName}
+                      onChangeText={handleChange("mosqueName")}
+                      onBlur={handleBlur("mosqueName")}
+                    />
+                    {touched.mosqueName && errors.mosqueName && (
+                      <Text style={styles.error}>{errors.mosqueName}</Text>
+                    )}
+                  </View>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Mosque Area</Text>
+                    <TextInput
+                      style={[styles.input, { textAlignVertical: "top" }]}
+                      placeholder="Mosque Area"
+                      value={values.mosqueArea}
+                      multiline
+                      numberOfLines={4}
+                      onChangeText={handleChange("mosqueArea")}
+                      onBlur={handleBlur("mosqueArea")}
+                    />
+                    {touched.mosqueArea && errors.mosqueArea && (
+                      <Text style={styles.error}>{errors.mosqueArea}</Text>
+                    )}
+                  </View>
+                </View>
+
+                <View style={styles.upiContainer}>
+                  <Pressable
+                    onPress={() => setUpiCollapse(!upiCollapse)}
+                    style={styles.upiHeader}
+                  >
+                    <Text style={styles.upiTitle}>UPI Details</Text>
+                    {upiCollapse ? (
+                      <Feather
+                        name="chevron-up"
+                        size={24}
+                        color={Colors.primary}
+                      />
+                    ) : (
+                      <Feather
+                        name="chevron-down"
+                        size={24}
+                        color={Colors.primary}
+                      />
+                    )}
+                  </Pressable>
+                  <>
+                    <View style={styles.inputGroup}>
+                      <Text style={styles.label}>UPI Id</Text>
+                      <TextInput
+                        style={styles.input}
+                        placeholder="UPI"
+                        value={values.upiId}
+                        onChangeText={handleChange("upiId")}
+                        onBlur={handleBlur("upiId")}
+                      />
+                      {touched.upiId && errors.upiId && (
+                        <Text style={styles.error}>{errors.upiId}</Text>
+                      )}
+                    </View>
+                    <View style={styles.upiQrContainer}>
+                      <Text style={styles.upiLabel}>UPI QR</Text>
+                      {/* <Button
                         title="Pick an image from camera roll"
                         onPress={pickImage}
                       /> */}
-                    <View
-                      style={{
-                        backgroundColor: "#e3eeec",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: 0,
-                        padding: 20,
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        borderColor: Colors.primary,
-                        borderStyle: "dashed",
-                      }}
-                    >
-                      {QRImage ? (
-                        <TouchableOpacity
-                          style={styles.qrImageContainer}
-                          onPress={() => setIsVisible(true)}
-                        >
-                          <Image
-                            source={{
-                              uri: QRImage,
-                            }}
-                            style={styles.qrImage}
-                          />
-                        </TouchableOpacity>
-                      ) : (
-                        <Entypo
-                          name="upload"
-                          size={24}
-                          color={Colors.primary}
-                        />
-                      )}
-
-                      <Pressable
-                        onPress={pickImage}
+                      <View
                         style={{
-                          // backgroundColor: Colors.primary,
-                          borderRadius: 6,
-                          padding: 8,
-                          paddingHorizontal: 16,
+                          backgroundColor: "#e3eeec",
+                          justifyContent: "center",
                           alignItems: "center",
-                          alignSelf: "center",
+                          gap: 0,
+                          padding: 20,
+                          borderRadius: 10,
+                          borderWidth: 1,
+                          borderColor: Colors.primary,
+                          borderStyle: "dashed",
                         }}
                       >
-                        <Text
+                        {QRImage ? (
+                          <TouchableOpacity
+                            style={styles.qrImageContainer}
+                            onPress={() => setIsVisible(true)}
+                          >
+                            <Image
+                              source={{
+                                uri: QRImage,
+                              }}
+                              style={styles.qrImage}
+                            />
+                          </TouchableOpacity>
+                        ) : (
+                          <Entypo
+                            name="upload"
+                            size={24}
+                            color={Colors.primary}
+                          />
+                        )}
+
+                        <Pressable
+                          onPress={pickImage}
                           style={{
-                            color: Colors.primary,
-                            fontSize: 14,
-                            fontFamily: "inter-bold",
+                            // backgroundColor: Colors.primary,
+                            borderRadius: 6,
+                            padding: 8,
+                            paddingHorizontal: 16,
+                            alignItems: "center",
+                            alignSelf: "center",
                           }}
                         >
-                          {QRImage ? "Change QR" : "Upload QR"}
-                        </Text>
-                      </Pressable>
+                          <Text
+                            style={{
+                              color: Colors.primary,
+                              fontSize: 14,
+                              fontFamily: "inter-bold",
+                            }}
+                          >
+                            {QRImage ? "Change QR" : "Upload QR"}
+                          </Text>
+                        </Pressable>
+                      </View>
                     </View>
-                  </View>
-                </>
-              </View>
+                  </>
+                </View>
 
-              <Pressable
-                style={styles.saveButton}
-                onPress={handleSubmit}
-                disabled={isSubmitting}
-              >
-                <Text style={styles.saveButtonText}>
-                  {isSubmitting ? "Saving..." : "Save Changes"}
-                </Text>
-              </Pressable>
+                <Pressable
+                  style={styles.saveButton}
+                  onPress={handleSubmit}
+                  disabled={isSubmitting}
+                >
+                  <Text style={styles.saveButtonText}>
+                    {isSubmitting ? "Saving..." : "Save Changes"}
+                  </Text>
+                </Pressable>
 
-              <ImageView
-                images={[
-                  {
-                    uri: "https://qph.cf2.quoracdn.net/main-qimg-6f10dcab91fe9a768c8757381a98e9ae-pjlq",
-                  },
-                ]}
-                imageIndex={0}
-                visible={visible}
-                onRequestClose={() => setIsVisible(false)}
-              />
-            </>
-          )}
-        </Formik>
-      </ScrollView>
+                <ImageView
+                  images={[
+                    {
+                      uri: "https://qph.cf2.quoracdn.net/main-qimg-6f10dcab91fe9a768c8757381a98e9ae-pjlq",
+                    },
+                  ]}
+                  imageIndex={0}
+                  visible={visible}
+                  onRequestClose={() => setIsVisible(false)}
+                />
+              </>
+            )}
+          </Formik>
+        </ScrollView>
+      </View>
       <ProfilePicUpload
         modalVisible={openImageUploadDialog}
         setModalVisible={setOpenImageUploadDialog}
         handlePickImage={handlePickImage}
       />
-    </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: Platform.OS === 'ios' ? 60 : 40,
+    paddingTop: Platform.OS === "ios" ? 60 : 40,
     padding: 16,
     // flex: 1,
     height: Dimensions.get("window").height,

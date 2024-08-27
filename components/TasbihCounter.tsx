@@ -120,7 +120,7 @@ export default function TasbihCounter() {
           dropdownTextStyles={styles.dropdownText}
           placeholder="Select tasbih"
         />
-        <View>
+        <View style={{ marginTop: 80 }} >
           <Text style={styles.tasbihText}>{tasbih}</Text>
         </View>
       </View>
@@ -196,14 +196,11 @@ export default function TasbihCounter() {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get("window").height * 0.8,
-    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "center",
+    flex: 1,
+    marginBottom: 20,
   },
   selectListContainer: {
-    height: "20%",
-    width: "85%",
     marginTop: 20,
     justifyContent: "space-between",
   },
@@ -310,7 +307,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#E3EEEC',
+    backgroundColor: '#fff',
     borderWidth: 2,
     borderColor: '#1C5153',
     alignItems: 'center',

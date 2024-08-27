@@ -7,6 +7,8 @@ import {
   Button,
   Platform,
   Pressable,
+  ScrollView,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigation, useRouter } from "expo-router";
@@ -52,131 +54,131 @@ export default function Index() {
   }, []);
 
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.profileContainer}>
-          <View style={styles.profilePic}>
-            <Image
-              style={{ width: 50, height: 50, borderRadius: 100 }}
-              source={
-                user?.profilePic
-                  ? {
-                      uri: user?.profilePic,
-                    }
-                  : user?.role === "admin"
-                  ? require("../../assets/images/profile.jpg")
-                  : user?.role === "subadmin"
-                  ? require("../../assets/images/subprofile.jpg")
-                  : require("../../assets/images/user.jpg")
-              }
-            />
-            <View style={{ gap: 5 }}>
-              <Text style={styles.textTitle}>Assalam Alaikum!</Text>
-              <Text style={styles.welcome}>
-                Welcome Back{" "}
-                <Text style={{ color: "#EAAF67", fontWeight: "bold" }}>
-                  {user?.name?.split(" ")[0]?.trim()}
-                </Text>
+    <View style={styles.container}>
+      <View style={styles.profileContainer}>
+        <View style={styles.profilePic}>
+          <Image
+            style={{ width: 50, height: 50, borderRadius: 100 }}
+            source={
+              user?.profilePic
+                ? {
+                    uri: user?.profilePic,
+                  }
+                : user?.role === "admin"
+                ? require("../../assets/images/profile.jpg")
+                : user?.role === "subadmin"
+                ? require("../../assets/images/subprofile.jpg")
+                : require("../../assets/images/user.jpg")
+            }
+          />
+          <View style={{ gap: 5 }}>
+            <Text style={styles.textTitle}>Assalam Alaikum!</Text>
+            <Text style={styles.welcome}>
+              Welcome Back{" "}
+              <Text style={{ color: "#EAAF67", fontWeight: "bold" }}>
+                {user?.name?.split(" ")[0]?.trim()}
               </Text>
-            </View>
+            </Text>
           </View>
-          {/* <View>
+        </View>
+        {/* <View>
             <Link href={"/notification"}>
               <Ionicons name="notifications" size={30} color="#EAAF67" />
             </Link>
           </View> */}
-        </View>
-        <View style={{ height: 200 }}>
-          <Swiper loop={true} autoplay={true} showsPagination={false}>
-            {images.map((image, index) =>
-              index === 0 ? (
-                <View key={index} style={styles.imageStyle}>
-                  <View style={styles.tasbeehCounter}>
-                    <View style={{ marginBottom: 10 }}>
-                      <Text style={{ fontSize: 14, fontFamily: "inter" }}>
-                        Remember Allah
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontFamily: "inter",
-                          fontWeight: "bold",
-                          width: 150,
-                        }}
-                      >
-                        Start Tasbih Counter
-                      </Text>
-                    </View>
-                    <View style={{ marginTop: 30 }}>
-                      <TouchableOpacity
-                        style={styles.getStartedBtn}
-                        onPress={() => router.push("/(tasbih)")}
-                      >
-                        <Text style={styles.buttonText}>Get Start Now</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <Image
-                      source={require("../../assets/images/MaskGroup.png")}
+      </View>
+      <View style={{ height: 200 }}>
+        <Swiper loop={true} autoplay={true} showsPagination={false}>
+          {images.map((image, index) =>
+            index === 0 ? (
+              <View key={index} style={styles.imageStyle}>
+                <View style={styles.tasbeehCounter}>
+                  <View style={{ marginBottom: 10 }}>
+                    <Text style={{ fontSize: 14, fontFamily: "inter" }}>
+                      Remember Allah
+                    </Text>
+                    <Text
                       style={{
+                        fontSize: 20,
+                        fontFamily: "inter",
+                        fontWeight: "bold",
                         width: 150,
-                        height: 150,
-                        position: "absolute",
-                        right: 0,
                       }}
-                    />
+                    >
+                      Start Tasbih Counter
+                    </Text>
                   </View>
+                  <View style={{ marginTop: 30 }}>
+                    <TouchableOpacity
+                      style={styles.getStartedBtn}
+                      onPress={() => router.push("/(tasbih)")}
+                    >
+                      <Text style={styles.buttonText}>Get Start Now</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Image
+                    source={require("../../assets/images/MaskGroup.png")}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      position: "absolute",
+                      right: 0,
+                    }}
+                  />
                 </View>
-              ) : (
-                <View key={index} style={styles.imageStyle}>
-                  <View style={styles.tasbeehCounter}>
-                    <View style={{ marginBottom: 10 }}>
-                      <Text style={{ fontSize: 14, fontFamily: "inter" }}>
-                        Remember Allah
-                      </Text>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontFamily: "inter-bold",
-                        }}
-                      >
-                        Start This
-                      </Text>
-                    </View>
-                    <View style={{ marginTop: 30 }}>
-                      <TouchableOpacity
-                        style={styles.getStartedBtn}
-                        onPress={() => router.push("/(qibla)")}
-                      >
-                        <Text style={styles.buttonText}>Get Start Now</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <Image
-                      source={require("../../assets/images/MaskGroup.png")}
+              </View>
+            ) : (
+              <View key={index} style={styles.imageStyle}>
+                <View style={styles.tasbeehCounter}>
+                  <View style={{ marginBottom: 10 }}>
+                    <Text style={{ fontSize: 14, fontFamily: "inter" }}>
+                      Remember Allah
+                    </Text>
+                    <Text
                       style={{
-                        width: 150,
-                        height: 150,
-                        position: "absolute",
-                        right: 0,
+                        fontSize: 20,
+                        fontFamily: "inter-bold",
                       }}
-                    />
+                    >
+                      Start This
+                    </Text>
                   </View>
+                  <View style={{ marginTop: 30 }}>
+                    <TouchableOpacity
+                      style={styles.getStartedBtn}
+                      onPress={() => router.push("/(qibla)")}
+                    >
+                      <Text style={styles.buttonText}>Get Start Now</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Image
+                    source={require("../../assets/images/MaskGroup.png")}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      position: "absolute",
+                      right: 0,
+                    }}
+                  />
                 </View>
-              )
-            )}
-          </Swiper>
-        </View>
+              </View>
+            )
+          )}
+        </Swiper>
+      </View>
 
-        <View
-          style={{
-            backgroundColor: Colors.WHITE,
-            flex: 1,
-            borderTopRightRadius: 30,
-            borderTopLeftRadius: 30,
-            padding: 20,
-            paddingTop: 30,
-            gap: 20,
-          }}
-        >
+      <ScrollView showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: 80,
+        }}
+        style={{
+          backgroundColor: Colors.WHITE,
+          flex: 1,
+          borderTopRightRadius: 30,
+          borderTopLeftRadius: 30,
+        }}
+      >
+        <View style={{ padding: 20, paddingTop: 20, gap: 16 }}>
           <Pressable
             onPress={() => router.push("/(qibla)")}
             style={{
@@ -185,7 +187,7 @@ export default function Index() {
               borderColor: "#eee",
               borderRadius: 10,
               padding: 14,
-              paddingVertical: 16,
+              paddingVertical: 14,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
@@ -198,7 +200,6 @@ export default function Index() {
                 source={require("../../assets/images/qibla.png")}
                 style={{ width: 60, height: 60 }}
               />
-
               <View>
                 <Text
                   style={{
@@ -231,7 +232,7 @@ export default function Index() {
               borderColor: "#eee",
               borderRadius: 10,
               padding: 14,
-              paddingVertical: 16,
+              paddingVertical: 14,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
@@ -244,7 +245,6 @@ export default function Index() {
                 source={require("../../assets/images/tasbih.png")}
                 style={{ width: 50, height: 50 }}
               />
-
               <View>
                 <Text
                   style={{
@@ -268,21 +268,20 @@ export default function Index() {
             </View>
             <Entypo name="chevron-right" size={20} color="#1C5153" />
           </Pressable>
-          <View style={{
+
+          <View
+            style={{
               backgroundColor: "#E3EEEC",
               borderWidth: 1,
               borderColor: "#eee",
               borderRadius: 10,
               padding: 14,
-              paddingVertical: 16,
+              paddingVertical: 14,
               flexDirection: "row",
               alignItems: "start",
               justifyContent: "space-between",
-            }}>
-            <Image
-              source={require("../../assets/images/qibla.png")}
-              style={styles.image}
-            />
+            }}
+          >
             <View style={styles.textContainer}>
               <Text style={styles.title}>Hadith Of The Day</Text>
               <Text style={styles.arabicText}>{hadith.arabic}</Text>
@@ -291,8 +290,8 @@ export default function Index() {
             </View>
           </View>
         </View>
-      </View>
-    </>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -383,13 +382,15 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: "inter-bold",
     color: "#1C5153",
-    fontSize: 18,
+    fontSize: 17,
     marginBottom: 8,
+    textAlign: "center",
   },
   arabicText: {
     fontFamily: "arabic",
     color: "#000",
-    fontSize: 14,
+    fontSize: 18,
+    textAlign: "center",
     marginBottom: 8,
   },
   englishText: {
@@ -397,10 +398,12 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 14,
     marginBottom: 8,
+    textAlign: "center",
   },
   source: {
-    fontFamily: "inter-regular",
+    fontFamily: "inter",
     color: "#888",
     fontSize: 12,
+    textAlign: "center",
   },
 });
