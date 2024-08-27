@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useAuth } from "../context/auth";
 import { Colors } from "@/constants/Colors";
 import { Entypo } from "@expo/vector-icons";
+import { HADIS_DATA } from "@/constants/constants";
 
 const images = [
   require("../../assets/images/MaskGroup.png"),
@@ -30,6 +31,7 @@ export default function Index() {
   const { getUserProfile } = useAuth();
   const router = useRouter();
   const user = useSelector((state) => state?.user);
+  let [hadith, setHadith] = useState({});
 
   useEffect(() => {
     getUserProfile();
@@ -39,6 +41,14 @@ export default function Index() {
     navigation.setOptions({
       headerShown: false,
     });
+    const today = new Date();
+    const start = new Date(today.getFullYear(), 0, 0);
+    const diff = today - start;
+    const oneDay = 1000 * 60 * 60 * 24;
+    const dayOfYear = Math.floor(diff / oneDay);
+
+    const hadithIndex = dayOfYear % HADIS_DATA.length;
+    setHadith(HADIS_DATA[hadithIndex]);
   }, []);
 
   return (
@@ -100,7 +110,7 @@ export default function Index() {
                     <View style={{ marginTop: 30 }}>
                       <TouchableOpacity
                         style={styles.getStartedBtn}
-                        onPress={() => router.push("/(qibla)")}
+                        onPress={() => router.push("/(tasbih)")}
                       >
                         <Text style={styles.buttonText}>Get Start Now</Text>
                       </TouchableOpacity>
@@ -214,7 +224,7 @@ export default function Index() {
           </Pressable>
 
           <Pressable
-            onPress={() => router.push("/(qibla)")}
+            onPress={() => router.push("/(tasbih)")}
             style={{
               backgroundColor: "#E3EEEC",
               borderWidth: 1,
@@ -258,6 +268,28 @@ export default function Index() {
             </View>
             <Entypo name="chevron-right" size={20} color="#1C5153" />
           </Pressable>
+          <View style={{
+              backgroundColor: "#E3EEEC",
+              borderWidth: 1,
+              borderColor: "#eee",
+              borderRadius: 10,
+              padding: 14,
+              paddingVertical: 16,
+              flexDirection: "row",
+              alignItems: "start",
+              justifyContent: "space-between",
+            }}>
+            <Image
+              source={require("../../assets/images/qibla.png")}
+              style={styles.image}
+            />
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>Hadith Of The Day</Text>
+              <Text style={styles.arabicText}>{hadith.arabic}</Text>
+              <Text style={styles.englishText}>{hadith.english}</Text>
+              <Text style={styles.source}>Source: {hadith.source}</Text>
+            </View>
+          </View>
         </View>
       </View>
     </>
@@ -269,7 +301,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     backgroundColor: "#102A2B",
-    paddingTop: Platform.OS === 'ios' ? 20 : 0,
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
   },
   scrollView: {
     marginHorizontal: 10,
@@ -339,5 +371,36 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: "inter",
     color: "#FFFFFF",
+  },
+  image: {
+    width: 50,
+    height: 50,
+    marginRight: 12,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  title: {
+    fontFamily: "inter-bold",
+    color: "#1C5153",
+    fontSize: 18,
+    marginBottom: 8,
+  },
+  arabicText: {
+    fontFamily: "arabic",
+    color: "#000",
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  englishText: {
+    fontFamily: "inter-medium",
+    color: "#000",
+    fontSize: 14,
+    marginBottom: 8,
+  },
+  source: {
+    fontFamily: "inter-regular",
+    color: "#888",
+    fontSize: 12,
   },
 });

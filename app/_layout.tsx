@@ -10,6 +10,7 @@ export default function RootLayout() {
     inter: require("./../assets/fonts/Inter_24pt-Regular.ttf"),
     "inter-medium": require("./../assets/fonts/Inter_18pt-Medium.ttf"),
     "inter-bold": require("./../assets/fonts/Inter_18pt-Bold.ttf"),
+    "arabic": require("./../assets/fonts/ArabQuranIslamic140-vnmnZ.ttf")
   });
 
   if (!fontsLoaded) {
