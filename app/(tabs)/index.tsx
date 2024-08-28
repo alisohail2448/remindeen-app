@@ -266,7 +266,7 @@ export default function Index() {
 
           <View
             style={{
-              backgroundColor: "#fbfbfb",
+              // backgroundColor: "#fbfbfb",
               borderWidth: 1,
               borderColor: Colors.primary,
               borderRadius: 10,
