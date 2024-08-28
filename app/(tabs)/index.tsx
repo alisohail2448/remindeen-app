@@ -20,12 +20,7 @@ import { useAuth } from "../context/auth";
 import { Colors } from "@/constants/Colors";
 import { Entypo } from "@expo/vector-icons";
 import { HADIS_DATA } from "@/constants/constants";
-
-const images = [
-  require("../../assets/images/MaskGroup.png"),
-  require("../../assets/images/MaskGroup.png"),
-  require("../../assets/images/MaskGroup.png"),
-];
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function Index() {
   const navigation = useNavigation();
@@ -88,86 +83,86 @@ export default function Index() {
           </View> */}
       </View>
       <View style={{ height: 200 }}>
-        <Swiper loop={true} autoplay={true} showsPagination={false}>
-          {images.map((image, index) =>
-            index === 0 ? (
-              <View key={index} style={styles.imageStyle}>
-                <View style={styles.tasbeehCounter}>
-                  <View style={{ marginBottom: 10 }}>
-                    <Text style={{ fontSize: 14, fontFamily: "inter" }}>
-                      Remember Allah
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontFamily: "inter",
-                        fontWeight: "bold",
-                        width: 150,
-                      }}
-                    >
-                      Start Tasbih Counter
-                    </Text>
-                  </View>
-                  <View style={{ marginTop: 30 }}>
-                    <TouchableOpacity
-                      style={styles.getStartedBtn}
-                      onPress={() => router.push("/(tasbih)")}
-                    >
-                      <Text style={styles.buttonText}>Get Start Now</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <Image
-                    source={require("../../assets/images/MaskGroup.png")}
-                    style={{
-                      width: 150,
-                      height: 150,
-                      position: "absolute",
-                      right: 0,
-                    }}
-                  />
-                </View>
+        <Swiper loop={true} autoplay={true} showsPagination={false} loop>
+          <View style={styles.imageStyle}>
+            <View style={styles.qiblaFinder}>
+              <View style={{ marginBottom: 10 }}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "inter",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Face the Qibla
+                </Text>
+                <Text style={{ fontSize: 15, fontFamily: "inter-medium" }}>
+                  Begin Your
+                </Text>
+                <Text style={{ fontSize: 15, fontFamily: "inter-medium" }}>
+                  Prayer Journey
+                </Text>
               </View>
-            ) : (
-              <View key={index} style={styles.imageStyle}>
-                <View style={styles.tasbeehCounter}>
-                  <View style={{ marginBottom: 10 }}>
-                    <Text style={{ fontSize: 14, fontFamily: "inter" }}>
-                      Remember Allah
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 20,
-                        fontFamily: "inter-bold",
-                      }}
-                    >
-                      Start This
-                    </Text>
-                  </View>
-                  <View style={{ marginTop: 30 }}>
-                    <TouchableOpacity
-                      style={styles.getStartedBtn}
-                      onPress={() => router.push("/(qibla)")}
-                    >
-                      <Text style={styles.buttonText}>Get Start Now</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <Image
-                    source={require("../../assets/images/MaskGroup.png")}
-                    style={{
-                      width: 150,
-                      height: 150,
-                      position: "absolute",
-                      right: 0,
-                    }}
-                  />
-                </View>
+              <View style={{}}>
+                <TouchableOpacity
+                  style={styles.findBtn}
+                  onPress={() => router.push("/(qibla)")}
+                >
+                  <Text style={styles.buttonText}>Find Qibla</Text>
+                </TouchableOpacity>
               </View>
-            )
-          )}
+              <Image
+                source={require("../../assets/images/swiper.jpg")}
+                style={{
+                  width: 150,
+                  height: 150,
+                  position: "absolute",
+                  right: 10,
+                }}
+              />
+            </View>
+          </View>
+          <View style={styles.imageStyle}>
+            <View style={styles.tasbeehCounter}>
+              <View style={{ marginBottom: 10 }}>
+                <Text style={{ fontSize: 14, fontFamily: "inter" }}>
+                  Remember Allah
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "inter",
+                    fontWeight: "bold",
+                    width: 150,
+                  }}
+                >
+                  Start Tasbih Counter
+                </Text>
+              </View>
+              <View style={{ marginTop: 30 }}>
+                <TouchableOpacity
+                  style={styles.getStartedBtn}
+                  onPress={() => router.push("/(tasbih)")}
+                >
+                  <Text style={styles.buttonText}>Get Start Now</Text>
+                </TouchableOpacity>
+              </View>
+              <Image
+                source={require("../../assets/images/MaskGroup.png")}
+                style={{
+                  width: 150,
+                  height: 150,
+                  position: "absolute",
+                  right: 0,
+                }}
+              />
+            </View>
+          </View>
         </Swiper>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingBottom: 80,
         }}
@@ -335,6 +330,15 @@ const styles = StyleSheet.create({
     fontFamily: "inter",
     color: "#FFFFFF",
   },
+  qiblaFinder: {
+    width: "auto",
+    height: 150,
+    margin: 10,
+    backgroundColor: "#fff",
+    borderRadius: 13,
+    padding: 20,
+    justifyContent: "center",
+  },
   tasbeehCounter: {
     width: "auto",
     height: 150,
@@ -365,6 +369,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#1C5153",
     borderRadius: 8,
     zIndex: 10,
+  },
+  findBtn: {
+    paddingVertical: 6,
+    paddingHorizontal: 30,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.BLACK,
+    borderRadius: 4,
+    zIndex: 10,
+    alignSelf: "flex-start",
   },
   buttonText: {
     fontSize: 17,
