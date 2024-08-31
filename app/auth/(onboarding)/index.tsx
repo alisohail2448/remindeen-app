@@ -16,14 +16,15 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { DESIGNATION_TYPES } from "@/constants/constants";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { createAccount } from "@/services/auth";
 import { useToast } from "react-native-toast-notifications";
+import { updateUser } from "@/services/profile";
+import { useAuth } from "@/app/context/auth";
 
 export default function Index() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
+  const { token, userId } = useAuth();
 
   useEffect(() => {
     navigation.setOptions({
@@ -33,30 +34,24 @@ export default function Index() {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Full Name is required"),
-    phone: Yup.string()
-      .required("Phone number is required")
-      .matches(/^[0-9]{10}$/, "Phone number is not valid"),
+    email: Yup.string().required("Email is required"),
     designation: Yup.string().required("Designation is required"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters"),
   });
 
   const handleCreateAccount = async (values) => {
     setLoading(true);
     try {
-      const data = await createAccount(values);
+      const data = await updateUser(token, userId, values);
 
       if (data.success) {
-        toast.show("Account created successfully", {
+        toast.show("User created successfully", {
           type: "normal",
         });
-        router.push("/auth/sign-in");
+        router.push("/(tabs)/");
       } else {
-        toast.show(data.msg || "Failed to create account", {
+        toast.show(data.msg || "Failed to create user", {
           type: "danger",
         });
-        console.log("Error:", data.msg); // Log the error message for debugging
       }
     } catch (error) {
       toast.show("An error occurred. Please try again later", {
@@ -72,9 +67,8 @@ export default function Index() {
     <Formik
       initialValues={{
         name: "",
-        phone: "",
         designation: "",
-        password: "",
+        email: "",
       }}
       validationSchema={validationSchema}
       onSubmit={handleCreateAccount}
@@ -104,7 +98,7 @@ export default function Index() {
                 color: Colors.primary,
               }}
             >
-              Create New Account
+              Make yourself Onboard
             </Text>
           </View>
 
@@ -113,27 +107,12 @@ export default function Index() {
             <TextInput
               style={styles.input}
               placeholder="Enter Name"
-              value={values.fullName}
+              value={values.name}
               onChangeText={handleChange("name")}
               onBlur={handleBlur("name")}
             />
             {touched.name && errors.name && (
               <Text style={styles.errorText}>{errors.name}</Text>
-            )}
-          </View>
-
-          <View style={{ marginTop: 20 }}>
-            <Text style={styles.label}>Phone</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="+91 9083427234"
-              value={values.phone}
-              onChangeText={handleChange("phone")}
-              onBlur={handleBlur("phone")}
-              keyboardType="phone-pad"
-            />
-            {touched.phone && errors.phone && (
-              <Text style={styles.errorText}>{errors.phone}</Text>
             )}
           </View>
 
@@ -157,37 +136,16 @@ export default function Index() {
           </View>
 
           <View style={{ marginTop: 20 }}>
-            <Text style={styles.label}>Password</Text>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                borderWidth: 1,
-                borderRadius: 10,
-                borderColor: Colors.primary,
-              }}
-            >
-              <TextInput
-                style={[styles.password, { flex: 1 }]}
-                placeholder="Enter Password"
-                secureTextEntry={!showPassword}
-                value={values.password}
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-              />
-              <TouchableOpacity
-                onPress={() => setShowPassword(!showPassword)}
-                style={{ padding: 10 }}
-              >
-                <Ionicons
-                  name={showPassword ? "eye-off" : "eye"}
-                  size={24}
-                  color={Colors.primary}
-                />
-              </TouchableOpacity>
-            </View>
-            {touched.password && errors.password && (
-              <Text style={styles.error}>{errors.password}</Text>
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="user@gmail.com"
+              value={values.email}
+              onChangeText={handleChange("email")}
+              onBlur={handleBlur("email")}
+            />
+            {touched.name && errors.name && (
+              <Text style={styles.errorText}>{errors.email}</Text>
             )}
           </View>
 
@@ -208,7 +166,7 @@ export default function Index() {
                     fontSize: 18,
                   }}
                 >
-                  Create Account
+                  Continue
                 </Text>
                 <Ionicons
                   name="chevron-forward-outline"
@@ -218,26 +176,6 @@ export default function Index() {
               </>
             )}
           </TouchableOpacity>
-
-          <View>
-            <Text
-              style={{
-                fontSize: 16,
-                fontFamily: "inter",
-                marginBottom: 10,
-                textAlign: "center",
-                marginTop: 40,
-              }}
-            >
-              Do you have account?{" "}
-              <Text
-                onPress={() => router.push("/auth/sign-in")}
-                style={{ fontFamily: "inter-bold", color: Colors.primary }}
-              >
-                Sign In
-              </Text>
-            </Text>
-          </View>
         </ScrollView>
       )}
     </Formik>
@@ -270,10 +208,11 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 15,
+    paddingVertical: 12,
     width: "100%",
     backgroundColor: Colors.primary,
     borderRadius: 10,
-    marginTop: 40,
+    marginTop: 80,
     flexDirection: "row",
     gap: 10,
     justifyContent: "center",

@@ -262,7 +262,7 @@ export default function Index() {
               <Entypo name="chevron-right" size={20} color="#1C5153" />
             </Pressable>
 
-            {subAdmin && (
+            {Object.keys(subAdmin).length !== 0 && (
               <Pressable
                 onPress={() => router.push(`/(user)/${subAdmin?._id}`)}
                 style={{

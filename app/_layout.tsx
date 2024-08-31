@@ -1,6 +1,6 @@
 import store from "@/redux/store";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import { Provider } from "react-redux";
 import { AuthProvider } from "./context/auth";
 import { ToastProvider } from "react-native-toast-notifications";

@@ -74,7 +74,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setToken(newToken);
       setUserId(decodedToken.id);
       await getUserProfile();
-      router.push("/(tabs)/");
+      // router.push("/(tabs)/");
     } catch (error) {
       console.log("Sign-in failed", error);
     }

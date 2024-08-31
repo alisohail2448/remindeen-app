@@ -100,7 +100,7 @@ export const TASBIH_DATA = [
 
 export const SERVER_URL = process.env.EXPO_PUBLIC_SERVER_URL;
 
-export const POST_CREATE_ACCOUNT = `${SERVER_URL}/auth/signup`;
+export const POST_SEND_OTP = `${SERVER_URL}/auth/send-otp`;
 export const POST_LOGIN_USER = `${SERVER_URL}/auth/login`;
 export const GET_USER_PROFILE = `${SERVER_URL}/auth/spatial/`;
 export const PUT_USER_PROFILE = `${SERVER_URL}/auth/spatial/`;
