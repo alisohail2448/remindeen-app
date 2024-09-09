@@ -3,7 +3,7 @@ import axios from "axios";
 
 export const sendOtp = async (data) => {
     try {
-      const response = await axios.post(POST_SEND_OTP, data);
+        const response = await axios.post(POST_SEND_OTP, data);
       return response.data;
     } catch (error) {
       if (error.response) {

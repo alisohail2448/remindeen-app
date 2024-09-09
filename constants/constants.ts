@@ -1,3 +1,22 @@
+
+
+
+
+export const SERVER_URL = process.env.EXPO_PUBLIC_SERVER_URL;
+
+export const POST_SEND_OTP = `${SERVER_URL}/auth/send-otp`;
+export const POST_LOGIN_USER = `${SERVER_URL}/auth/login`;
+export const GET_USER_PROFILE = `${SERVER_URL}/auth/spatial/`;
+export const PUT_USER_PROFILE = `${SERVER_URL}/auth/spatial/`;
+export const POST_UPLOAD_IMAGE = `${SERVER_URL}/upload/image`;
+export const GET_SUB_ADMIN = `${SERVER_URL}/auth/user/subadmin/`;
+export const GET_REGULAR_USERS = `${SERVER_URL}/auth/user/`;
+export const GET_MY_ADMIN = `${SERVER_URL}/auth/admin/`;
+export const POST_ADD_USER = `${SERVER_URL}/auth/user/add`;
+export const POST_REMOVE_USER = `${SERVER_URL}/auth/admin/`;
+export const GET_MESSAGES = `${SERVER_URL}/auth/message/`;
+
+
 export const DESIGNATION_TYPES = [
   { key: "1", value: "Aalim" },
   { key: "2", value: "Hafiz" },
@@ -98,19 +117,7 @@ export const TASBIH_DATA = [
   { key: "يَا رَحِيمُ", value: "Ya Rahim" },
 ];
 
-export const SERVER_URL = process.env.EXPO_PUBLIC_SERVER_URL;
 
-export const POST_SEND_OTP = `${SERVER_URL}/auth/send-otp`;
-export const POST_LOGIN_USER = `${SERVER_URL}/auth/login`;
-export const GET_USER_PROFILE = `${SERVER_URL}/auth/spatial/`;
-export const PUT_USER_PROFILE = `${SERVER_URL}/auth/spatial/`;
-export const POST_UPLOAD_IMAGE = `${SERVER_URL}/upload/image`;
-export const GET_SUB_ADMIN = `${SERVER_URL}/auth/user/subadmin/`;
-export const GET_REGULAR_USERS = `${SERVER_URL}/auth/user/`;
-export const GET_MY_ADMIN = `${SERVER_URL}/auth/admin/`;
-export const POST_ADD_USER = `${SERVER_URL}/auth/user/add`;
-export const POST_REMOVE_USER = `${SERVER_URL}/auth/admin/`;
-export const GET_MESSAGES = `${SERVER_URL}/auth/message/`;
 
 export const HADIS_DATA = [
   {

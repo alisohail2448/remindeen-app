@@ -47,6 +47,7 @@ export default function Index() {
     try {
       const response = await sendOtp({phone: phoneNumber});
       if (response.success === false) {
+        console.log('responseee', response)
         toast.show("Failed to send OTP:", response.msg, {
           type: "danger",
         });
