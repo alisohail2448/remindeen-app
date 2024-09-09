@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Button,
   Pressable,
+  SafeAreaView,
 } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "@/constants/Colors";
@@ -21,17 +22,17 @@ export default function ProfileDetails() {
   const [visible, setIsVisible] = useState(false);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <View style={{ marginBottom: 50 }}>
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
-          gap: 14,
+          gap: 10,
           backgroundColor: Colors.WHITE,
           borderWidth: 2,
           borderColor: "#eee",
           borderRadius: 10,
-          padding: 16,
+          padding: 12,
         }}
       >
         <View
@@ -44,11 +45,17 @@ export default function ProfileDetails() {
           }}
         >
           <Image
-            style={{ width: 70, height: 70, borderRadius: 100 }}
+            style={{ width: 60, height: 60, borderRadius: 100 }}
             source={
               user?.profilePic
-                ? user?.profilePic
-                : require("../assets/images/profile.png")
+                ? {
+                    uri: user?.profilePic,
+                  }
+                : user?.role === "admin"
+                ? require("../assets/images/profile.jpg")
+                : user?.role === "subadmin"
+                ? require("../assets/images/subprofile.jpg")
+                : require("../assets/images/user.jpg")
             }
           />
         </View>
@@ -69,20 +76,27 @@ export default function ProfileDetails() {
             >
               {user?.name}
             </Text>
-            <Text
+            <View
               style={{
-                fontSize: 15,
-                fontFamily: "inter-medium",
-                color: Colors.primary,
-                textTransform: "capitalize",
                 backgroundColor: "#e3eeec",
                 borderRadius: 12,
                 paddingVertical: 1,
                 paddingHorizontal: 14,
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              {user?.role}
-            </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: "inter-medium",
+                  color: Colors.primary,
+                  textTransform: "capitalize",
+                }}
+              >
+                {user?.role}
+              </Text>
+            </View>
           </View>
           <Text
             style={{
@@ -271,19 +285,25 @@ export default function ProfileDetails() {
                       alignItems: "center",
                     }}
                   >
-                    <Text
+                    <View
                       style={{
-                        fontSize: 16,
-                        fontFamily: "inter-medium",
-                        color: Colors.primary,
                         backgroundColor: "#e3eeec",
                         borderRadius: 12,
                         paddingVertical: 8,
                         paddingHorizontal: 14,
+                        overflow: "hidden",
                       }}
                     >
-                      {user?.upi?.id}
-                    </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontFamily: "inter-medium",
+                          color: Colors.primary,
+                        }}
+                      >
+                        {user?.upi?.id}
+                      </Text>
+                    </View>
                     <FontAwesome6 name="copy" size={20} color="black" />
                   </View>
                 </>
@@ -356,16 +376,18 @@ export default function ProfileDetails() {
         </Pressable>
       </View>
 
-      <ImageView
-        images={[
-          {
-            uri: "https://qph.cf2.quoracdn.net/main-qimg-6f10dcab91fe9a768c8757381a98e9ae-pjlq",
-          },
-        ]}
-        imageIndex={0}
-        visible={visible}
-        onRequestClose={() => setIsVisible(false)}
-      />
-    </ScrollView>
+      {user?.upi?.qr && (
+        <ImageView
+          images={[
+            {
+              uri: user?.upi?.qr,
+            },
+          ]}
+          imageIndex={0}
+          visible={visible}
+          onRequestClose={() => setIsVisible(false)}
+        />
+      )}
+    </View>
   );
 }

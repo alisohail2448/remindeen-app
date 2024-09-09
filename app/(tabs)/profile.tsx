@@ -1,14 +1,12 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, SafeAreaView, Dimensions, ScrollView, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useNavigation } from "expo-router";
 import { Feather, FontAwesome6 } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import ProfileDetails from "@/components/ProfileDetails";
 
-
 export default function Index() {
   const navigation = useNavigation();
-
 
   useEffect(() => {
     navigation.setOptions({
@@ -17,13 +15,14 @@ export default function Index() {
   }, []);
 
   return (
-    <View
+    <ScrollView showsVerticalScrollIndicator={false} 
       style={{
-        marginTop: 40,
+        paddingTop: Platform.OS === 'ios' ? 60 : 40,
         padding: 16,
+        // flex: 1,
+        height: Dimensions.get('window').height,
         backgroundColor: "#FBFBFB",
-        height: "100%",
-        marginBottom: 40,
+        marginBottom: 50,
       }}
     >
       <View
@@ -41,7 +40,7 @@ export default function Index() {
             gap: 10,
           }}
         >
-          <Pressable
+          {/* <Pressable
             onPress={() => navigation.goBack()}
             style={{
               backgroundColor: "#e3eeec",
@@ -50,7 +49,7 @@ export default function Index() {
             }}
           >
             <Feather name="arrow-left" size={24} color="#004B40" />
-          </Pressable>
+          </Pressable> */}
           <Text
             style={{
               fontSize: 20,
@@ -61,7 +60,8 @@ export default function Index() {
             Profile
           </Text>
         </View>
-        <Pressable onPress={() => router.push('/profile/edit')}
+        <Pressable
+          onPress={() => router.push("/(profile)/edit")}
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -85,6 +85,6 @@ export default function Index() {
         </Pressable>
       </View>
       <ProfileDetails />
-    </View>
+    </ScrollView>
   );
 }

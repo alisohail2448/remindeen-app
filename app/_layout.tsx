@@ -1,14 +1,16 @@
 import store from "@/redux/store";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import { Provider } from "react-redux";
 import { AuthProvider } from "./context/auth";
+import { ToastProvider } from "react-native-toast-notifications";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     inter: require("./../assets/fonts/Inter_24pt-Regular.ttf"),
     "inter-medium": require("./../assets/fonts/Inter_18pt-Medium.ttf"),
     "inter-bold": require("./../assets/fonts/Inter_18pt-Bold.ttf"),
+    arabic: require("./../assets/fonts/ArabQuranIslamic140-vnmnZ.ttf"),
   });
 
   if (!fontsLoaded) {
@@ -16,17 +18,25 @@ export default function RootLayout() {
   }
 
   return (
-    <Provider store={store}>
-      <AuthProvider>
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              headerShown: false,
+    <ToastProvider>
+      <Provider store={store}>
+        <AuthProvider>
+          <Stack
+            screenOptions={{
+              contentStyle: {
+                backgroundColor: "#fbfbfb",
+              },
             }}
-          />
-        </Stack>
-      </AuthProvider>
-    </Provider>
+          >
+            <Stack.Screen
+              name="index"
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack>
+        </AuthProvider>
+      </Provider>
+    </ToastProvider>
   );
 }

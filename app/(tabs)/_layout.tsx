@@ -1,44 +1,26 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { Tabs } from "expo-router";
-import { Feather, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import React, { useEffect } from "react";
+import { Tabs, useNavigation } from "expo-router";
+import TabBar from "@/components/TabBar";
 
 export default () => {
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, []);
+
   return (
     <Tabs
+      tabBar={(props) => <TabBar {...props} />}
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Tabs.Screen
-        name="home"
-        options={{
-          tabBarLabel: "Home",
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <Ionicons name="home" size={24} color="black" />
-            ) : (
-                <Ionicons name="home-outline" size={24} color="black" />
-            ),
-        }}
-      />
-      <Tabs.Screen
-        name="list"
-        options={{
-          tabBarLabel: "Profile",
-          tabBarIcon: ({ focused }) =>
-            focused ? (
-              <FontAwesome5 name="user-alt" size={20} color="black" />
-            ) : (
-              <FontAwesome5 name="user" size={20} color="black" />
-            ),
-          //   title: "Settings",
-          //   headerTitleAlign: "center",
-          //   headerTitle: "Settings",
-          //   headerStyle: { backgroundColor: "#FF6464" },
-          //   headerTintColor: "#fff",
-        }}
-      />
+      <Tabs.Screen name="index" options={{ title: 'Home' }} />
+      <Tabs.Screen name="community" options={{ title: 'Community' }} />
+      <Tabs.Screen name="chats" options={{ title: 'Chats' }} />
+      <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
     </Tabs>
   );
 };

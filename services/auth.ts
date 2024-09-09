@@ -1,9 +1,9 @@
-import { POST_CREATE_ACCOUNT, POST_LOGIN_USER } from "@/constants/constants";
+import { POST_SEND_OTP, POST_LOGIN_USER } from "@/constants/constants";
 import axios from "axios";
 
-export const createAccount = async (accountData) => {
+export const sendOtp = async (data) => {
     try {
-      const response = await axios.post(POST_CREATE_ACCOUNT, accountData);
+      const response = await axios.post(POST_SEND_OTP, data);
       return response.data;
     } catch (error) {
       if (error.response) {
@@ -16,9 +16,9 @@ export const createAccount = async (accountData) => {
     }
   };
 
-  export const loginUser = async (values) => {
+  export const signInApi = async (data) => {
     try {
-      const response = await axios.post(POST_LOGIN_USER, values);
+      const response = await axios.post(POST_LOGIN_USER, data);
       return response.data;
     } catch (error) {
       if (error.response) {
@@ -30,3 +30,4 @@ export const createAccount = async (accountData) => {
       }
     }
   }
+  
